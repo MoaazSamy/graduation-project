@@ -12,7 +12,7 @@
 
     // ---- Wait for DOM ----
     document.addEventListener('DOMContentLoaded', () => {
-        const token = API_BASE.getItem('access');
+        const token = localStorage.getItem('access');
         if (!token) return; // مش مسجل دخول
 
         injectNotificationUI();
@@ -60,7 +60,7 @@
 
     // ---- FETCH UNREAD COUNT ----
     async function fetchUnreadCount() {
-        const token = API_BASE.getItem('access');
+        const token = localStorage.getItem('access');
         if (!token) return;
 
         try {
@@ -85,7 +85,7 @@
 
     // ---- FETCH ALL NOTIFICATIONS ----
     async function fetchNotifications() {
-        const token = API_BASE.getItem('access');
+        const token = localStorage.getItem('access');
         if (!token) return;
 
         const body = document.getElementById('notif-panel-body');
@@ -172,7 +172,7 @@
 
     // ---- MARK READ ----
     async function markRead(id, el) {
-        const token = API_BASE.getItem('access');
+        const token = localStorage.getItem('access');
         if (!token) return;
 
         try {
@@ -194,7 +194,7 @@
 
     // ---- MARK ALL READ ----
     async function markAllRead() {
-        const token = API_BASE.getItem('access');
+        const token = localStorage.getItem('access');
         if (!token) return;
 
         try {

@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (productId) {
         loadProduct(productId);
         document.addEventListener('languageChanged', () => {
-            currentLang = API_BASE.getItem('lang') || 'ar';
+            currentLang = localStorage.getItem('lang') || 'ar';
             loadProduct(productId);
         });
     } else {
@@ -330,7 +330,7 @@ async function addToCart(productId) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer " + API_BASE.getItem("access")
+                "Authorization": "Bearer " + localStorage.getItem("access")
             },
             body: JSON.stringify({
                 product: productId,
@@ -368,7 +368,7 @@ async function addToCart(productId) {
 }
 
 async function loadCart() {
-    const token = API_BASE.getItem("access");
+    const token = localStorage.getItem("access");
 
     if (!token) {
         console.log("❌ مفيش token");
@@ -414,7 +414,7 @@ async function increaseQty(index) {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + API_BASE.getItem("access")
+            "Authorization": "Bearer " + localStorage.getItem("access")
         },
         body: JSON.stringify({
             product: item.productId,
@@ -434,7 +434,7 @@ async function decreaseQty(index) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer " + API_BASE.getItem("access")
+                "Authorization": "Bearer " + localStorage.getItem("access")
             },
             body: JSON.stringify({
                 product: item.productId,
@@ -446,7 +446,7 @@ async function decreaseQty(index) {
         await fetch(`${API_BASE}/api/cart/delete/${item.id}/`, {
             method: "DELETE",
             headers: {
-                "Authorization": "Bearer " + API_BASE.getItem("access")
+                "Authorization": "Bearer " + localStorage.getItem("access")
             }
         });
     }
@@ -459,7 +459,7 @@ async function removeFromCart(itemId) {
         await fetch(`${API_BASE}/api/cart/delete/${itemId}/`, {
             method: "DELETE",
             headers: {
-                "Authorization": "Bearer " + API_BASE.getItem("access")
+                "Authorization": "Bearer " + localStorage.getItem("access")
             }
         });
 
@@ -549,7 +549,7 @@ function performSearch() {
 
 function toggleLanguage() {
     currentLang = currentLang === 'ar' ? 'en' : 'ar';
-    API_BASE.setItem('lang', currentLang);
+    localStorage.setItem('lang', currentLang);
     location.reload(); // إعادة تحميل الصفحة لتطبيق التغييرات بالكامل
 }
 
@@ -771,7 +771,7 @@ window.onclick = function (event) {
 
 // عند تحميل الصفحة، نتحقق من الوضع المحفوظ
 document.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = API_BASE.getItem('theme');
+    const savedTheme = localStorage.getItem('theme');
     const toggleBtn = document.getElementById('theme-toggle');
 
     if (savedTheme === 'dark') {
@@ -788,9 +788,9 @@ function toggleTheme() {
 
     // حفظ الاختيار في المتصفح
     if (body.classList.contains('dark-mode')) {
-        API_BASE.setItem('theme', 'dark');
+        localStorage.setItem('theme', 'dark');
     } else {
-        API_BASE.setItem('theme', 'light');
+        localStorage.setItem('theme', 'light');
     }
 }
 
@@ -932,7 +932,7 @@ function showToast(message, color = "#041e0d") {
 // WISHLIST SYSTEM (Product Page)
 // =========================================
 
-let wishlistIds = JSON.parse(API_BASE.getItem('wishlistIds') || '[]');
+let wishlistIds = JSON.parse(localStorage.getItem('wishlistIds') || '[]');
 
 function isInWishlist(productId) {
     return wishlistIds.includes(Number(productId));
@@ -940,7 +940,7 @@ function isInWishlist(productId) {
 
 async function toggleWishlist(productId, btnEl) {
     productId = Number(productId);
-    const token = API_BASE.getItem('access');
+    const token = localStorage.getItem('access');
     const t = translations[currentLang];
 
     if (!token) {
@@ -980,7 +980,7 @@ async function toggleWishlist(productId, btnEl) {
         }
     }
 
-    API_BASE.setItem('wishlistIds', JSON.stringify(wishlistIds));
+    localStorage.setItem('wishlistIds', JSON.stringify(wishlistIds));
     updateWishlistBadge();
 
     // Open wishlist panel automatically
@@ -993,7 +993,7 @@ async function toggleWishlist(productId, btnEl) {
 
 async function removeFromWishlistAPI(productId) {
     productId = Number(productId);
-    const token = API_BASE.getItem('access');
+    const token = localStorage.getItem('access');
     if (token) {
         try {
             await fetch(`${API_BASE}/api/wishlist/remove/`, {
@@ -1004,7 +1004,7 @@ async function removeFromWishlistAPI(productId) {
         } catch (err) { console.error(err); }
     }
     wishlistIds = wishlistIds.filter(id => id !== productId);
-    API_BASE.setItem('wishlistIds', JSON.stringify(wishlistIds));
+    localStorage.setItem('wishlistIds', JSON.stringify(wishlistIds));
     updateWishlistBadge();
     renderWishlistPanel();
     showToast(translations[currentLang].removeFromWishlist || 'تم الإزالة', '#ff4757');
@@ -1068,14 +1068,14 @@ async function renderWishlistPanel() {
 
 // Load wishlist from API
 async function loadWishlistFromAPI() {
-    const token = API_BASE.getItem('access');
+    const token = localStorage.getItem('access');
     if (!token) return;
     try {
         const res = await fetch(`${API_BASE}/api/wishlist/`, { headers: { 'Authorization': `Bearer ${token}` } });
         if (res.ok) {
             const data = await res.json();
             wishlistIds = data.map(item => item.product);
-            API_BASE.setItem('wishlistIds', JSON.stringify(wishlistIds));
+            localStorage.setItem('wishlistIds', JSON.stringify(wishlistIds));
             updateWishlistBadge();
         }
     } catch (err) { console.error(err); }
@@ -1085,7 +1085,7 @@ async function loadWishlistFromAPI() {
 // COMPARE SYSTEM (Product Page)
 // =========================================
 
-let compareList = JSON.parse(API_BASE.getItem('compareList') || '[]');
+let compareList = JSON.parse(localStorage.getItem('compareList') || '[]');
 
 function isInCompareList(productId) {
     return compareList.includes(Number(productId));
@@ -1117,7 +1117,7 @@ function toggleCompareProduct(productId, btnEl) {
         }
     }
 
-    API_BASE.setItem('compareList', JSON.stringify(compareList));
+    localStorage.setItem('compareList', JSON.stringify(compareList));
 }
 
 // Initialize on load
@@ -1215,7 +1215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reviewForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
-            const token = API_BASE.getItem('access');
+            const token = localStorage.getItem('access');
             const loginMsg = document.getElementById('review-login-msg');
 
             if (!token) {
@@ -1287,7 +1287,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // =========================================
 function checkUserAuth() {
     const authArea = document.getElementById('user-auth-area');
-    const user = JSON.parse(API_BASE.getItem('currentUser'));
+    const user = JSON.parse(localStorage.getItem('currentUser'));
 
     if (!authArea) return;
 

@@ -119,7 +119,7 @@ function selectAccessoryType(type, el) {
 
 // ---- Check Admin Auth ----
 function checkAdminAuth() {
-    const token = API_BASE.getItem('access');
+    const token = localStorage.getItem('access');
     if (!token) {
         showToast('يجب تسجيل الدخول كمدير أولاً', 'error');
         setTimeout(() => {
@@ -128,7 +128,7 @@ function checkAdminAuth() {
         return;
     }
     // Update admin name
-    const user = JSON.parse(API_BASE.getItem('currentUser') || '{}');
+    const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
     if (user.name) {
         document.getElementById('admin-name').textContent = `مرحباً، ${user.name}`;
     }
@@ -143,10 +143,10 @@ function logout() {
 
 // ---- Auth UI ----
 function updateAuthUI() {
-    const token = API_BASE.getItem('access');
+    const token = localStorage.getItem('access');
     const authArea = document.getElementById('user-auth-area');
     if (token) {
-        const user = JSON.parse(API_BASE.getItem('currentUser') || '{}');
+        const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
         authArea.innerHTML = `
             <div style="display:flex;align-items:center;gap:10px;">
                 <a href="profile.html" style="color:var(--navbar-text);font-weight:600;">
@@ -161,7 +161,7 @@ function updateAuthUI() {
 //   THEME
 // =========================
 function initTheme() {
-    const saved = API_BASE.getItem('theme');
+    const saved = localStorage.getItem('theme');
     if (saved === 'dark') {
         document.body.classList.add('dark-mode');
         const toggle = document.getElementById('theme-toggle');
@@ -171,7 +171,7 @@ function initTheme() {
 
 function toggleTheme() {
     document.body.classList.toggle('dark-mode');
-    API_BASE.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
 }
 
 function openLoginPage() {
@@ -802,7 +802,7 @@ function setupFormSubmit() {
             return;
         }
 
-        const token = API_BASE.getItem('access');
+        const token = localStorage.getItem('access');
         if (!token) {
             showToast('يجب تسجيل الدخول كمدير', 'error');
             return;
@@ -909,7 +909,7 @@ function setupFormSubmit() {
 //   TOGGLE LATEST PRODUCT
 // =========================
 async function toggleLatestProduct(id, currentStatus) {
-    const token = API_BASE.getItem('access');
+    const token = localStorage.getItem('access');
     if (!token) {
         showToast('يجب تسجيل الدخول كمدير', 'error');
         return;
@@ -945,7 +945,7 @@ async function toggleLatestProduct(id, currentStatus) {
 //   EDIT PRODUCT
 // =========================
 async function editProduct(productId) {
-    const token = API_BASE.getItem('access');
+    const token = localStorage.getItem('access');
     try {
         const res = await fetch(`${API_BASE}/products/${productId}/`, {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -1070,7 +1070,7 @@ function cancelEditMode() {
 async function deleteGalleryImage(imageId, btn) {
     if (!confirm('هل أنت متأكد من حذف هذه الصورة؟')) return;
 
-    const token = API_BASE.getItem('access');
+    const token = localStorage.getItem('access');
     try {
         const res = await fetch(`${API_BASE}/products/manage/image/${imageId}/`, {
             method: 'DELETE',
@@ -1105,7 +1105,7 @@ function closeDeleteModal() {
 async function confirmDelete() {
     if (!deleteProductId) return;
 
-    const token = API_BASE.getItem('access');
+    const token = localStorage.getItem('access');
     try {
         const res = await fetch(`${API_BASE}/products/manage/${deleteProductId}/`, {
             method: 'DELETE',
@@ -1340,7 +1340,7 @@ const STATUS_ICONS = {
 
 // ---- Load Admin Orders ----
 async function loadAdminOrders() {
-    const token = API_BASE.getItem('access');
+    const token = localStorage.getItem('access');
     if (!token) return;
 
     try {
@@ -1464,7 +1464,7 @@ function renderAdminOrdersTable(orders) {
 
 // ---- Update Order Status ----
 async function updateOrderStatus(orderId, newStatus, selectEl) {
-    const token = API_BASE.getItem('access');
+    const token = localStorage.getItem('access');
     if (!token) return;
 
     try {
@@ -1687,7 +1687,7 @@ async function loadAdminCoupons() {
 
     try {
         const res = await fetch(`${API_BASE}/orders/admin/coupons/`, {
-            headers: { "Authorization": "Bearer " + API_BASE.getItem("access") }
+            headers: { "Authorization": "Bearer " + localStorage.getItem("access") }
         });
         const data = await res.json();
         
@@ -1766,7 +1766,7 @@ function setupCouponForm() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + API_BASE.getItem('access')
+                    'Authorization': 'Bearer ' + localStorage.getItem('access')
                 },
                 body: JSON.stringify(payload)
             });
@@ -1796,7 +1796,7 @@ window.toggleCoupon = async function(id, newState) {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + API_BASE.getItem('access')
+                'Authorization': 'Bearer ' + localStorage.getItem('access')
             },
             body: JSON.stringify({ active: newState })
         });
@@ -1815,7 +1815,7 @@ window.deleteCoupon = async function(id) {
         const res = await fetch(`${API_BASE}/orders/admin/coupons/${id}/`, {
             method: 'DELETE',
             headers: {
-                'Authorization': 'Bearer ' + API_BASE.getItem('access')
+                'Authorization': 'Bearer ' + localStorage.getItem('access')
             }
         });
         if (res.ok) {
@@ -1838,7 +1838,7 @@ async function loadAdminCustomers() {
 
     try {
         const res = await fetch(`${API_BASE}/users/admin/all/`, {
-            headers: { "Authorization": "Bearer " + API_BASE.getItem("access") }
+            headers: { "Authorization": "Bearer " + localStorage.getItem("access") }
         });
         const data = await res.json();
         
@@ -1900,7 +1900,7 @@ window.togglePremiumStatus = async function(userId, isPremium) {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + API_BASE.getItem('access')
+                'Authorization': 'Bearer ' + localStorage.getItem('access')
             },
             body: JSON.stringify({ is_premium: isPremium })
         });

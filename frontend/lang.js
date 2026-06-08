@@ -1,5 +1,5 @@
 
-let currentLang = API_BASE.getItem('lang') || "ar";
+let currentLang = localStorage.getItem('lang') || "ar";
 
 const translations = {
   ar: {
@@ -414,7 +414,7 @@ function applyLanguage() {
 
 function toggleLanguage() {
   currentLang = currentLang === "ar" ? "en" : "ar";
-  API_BASE.setItem('lang', currentLang);
+  localStorage.setItem('lang', currentLang);
   applyLanguage();
 }
 

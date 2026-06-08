@@ -9,8 +9,8 @@
 
     if (access && refresh) {
         // ✅ حفظ التوكنز في API_BASE
-        API_BASE.setItem('access', access);
-        API_BASE.setItem('refresh', refresh);
+        localStorage.setItem('access', access);
+        localStorage.setItem('refresh', refresh);
 
         // ✅ نجيب بيانات المستخدم من الـ URL params أو من الـ API
         const userId = params.get('user_id');
@@ -20,7 +20,7 @@
 
         if (userId && userName) {
             // البيانات موجودة في الـ URL — نحفظها مباشرة
-            API_BASE.setItem('currentUser', JSON.stringify({
+            localStorage.setItem('currentUser', JSON.stringify({
                 id: parseInt(userId),
                 name: userName,
                 email: userEmail || '',
@@ -39,7 +39,7 @@
                 });
                 if (res.ok) {
                     const userData = await res.json();
-                    API_BASE.setItem('currentUser', JSON.stringify({
+                    localStorage.setItem('currentUser', JSON.stringify({
                         id: userData.id,
                         name: userData.username,
                         email: userData.email,
@@ -111,11 +111,11 @@ document.getElementById("login-form").addEventListener("submit", async function(
         }
 
         // ✅ حفظ التوكن في API_BASE
-        API_BASE.setItem("access", data.access);
-        API_BASE.setItem("refresh", data.refresh);
+        localStorage.setItem("access", data.access);
+        localStorage.setItem("refresh", data.refresh);
 
         // ✅ حفظ بيانات المستخدم
-        API_BASE.setItem("currentUser", JSON.stringify({
+        localStorage.setItem("currentUser", JSON.stringify({
             id: data.user_id,
             name: data.user_name,
             email: data.user_email,
