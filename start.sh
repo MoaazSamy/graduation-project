@@ -1,0 +1,2 @@
+cd backend
+gunicorn core.wsgi:application

@@ -1,0 +1,67 @@
+
+# =====================
+# Virtual Environments
+# =====================
+.venv/
+backend/venv/
+venv/
+
+# =====================
+# IDE / Editor
+# =====================
+.idea/
+.vscode/
+
+# =====================
+# Environment Variables
+# =====================
+.env
+backend/.env
+
+# =====================
+# Database
+# =====================
+db.sqlite3
+backend/db.sqlite3
+
+# =====================
+# Media Uploads
+# =====================
+media/
+backend/media/
+
+# =====================
+# Python Cache
+# =====================
+__pycache__/
+**/__pycache__/
+*.pyc
+
+# =====================
+# Logs
+# =====================
+*.log
+
+# =====================
+# Temporary Files
+# =====================
+temp.txt
+
+# =====================
+# OS Files
+# =====================
+.DS_Store
+Thumbs.db
+
+# =====================
+# Frontend Builds
+# =====================
+frontend/node_modules/
+node_modules/
+frontend/dist/
+frontend/build/
+
+# =====================
+# Git / system
+# =====================
+.git/

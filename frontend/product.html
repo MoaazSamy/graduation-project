@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المنتج | 👑 CrownMob</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="product.css">
+</head>
+<body>
+
+  <!-- MODERN NAVBAR -->
+  <nav class="navbar-modern">
+    <!-- Top Row -->
+    <div class="navbar-top">
+      
+      <!-- Logo and Notifications -->
+      <div class="logo-container" style="display: flex; align-items: center; gap: 15px;">
+        <div class="logo">
+          <a href="index.html">👑 CrownMob</a>
+        </div>
+        
+        <!-- Notification Button -->
+        <div id="notif-btn" class="notification-icon" onclick="window._notifToggle && window._notifToggle()" style="position: relative; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; font-size: 18px; transition: 0.3s;">
+          <i class="far fa-bell"></i>
+          <span class="badge" id="notif-badge" style="position: absolute; top: -2px; right: -2px; background: #ff4757; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; display: none; align-items: center; justify-content: center; font-weight: bold;">0</span>
+        </div>
+      </div>
+
+      <!-- Search Bar (Center) -->
+      <div class="nav-search-container" style="position: relative; width: 40%; max-width: 500px;">
+        <div class="nav-search-bar" style="width: 100%; max-width: 100%;">
+          <input type="text" id="search-input" data-lang-placeholder="searchPlaceholder" data-lang-placeholder="searchPlaceholder" placeholder="ابحث عن منتج...">
+          <button class="nav-search-btn" onclick="performSearch()">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <!-- Live Suggestions Dropdown -->
+        <div id="search-suggestions" class="search-suggestions-dropdown"></div>
+      </div>
+
+      <!-- Right Actions -->
+      <div class="nav-actions">
+        <button id="lang-btn" class="lang-btn" onclick="toggleLanguage()" title="تغيير اللغة">
+          <i class="fas fa-globe"></i>
+          <span class="lang-text">EN</span>
+        </button>
+
+        <label class="theme-switch">
+          <input type="checkbox" id="theme-toggle" onclick="toggleTheme()">
+          <span class="slider">
+            <i class="fas fa-sun sun-icon"></i>
+            <i class="fas fa-moon moon-icon"></i>
+          </span>
+        </label>
+
+        <div class="wishlist-icon" onclick="toggleWishlistPanel()" title="Wishlist">
+          <i class="far fa-heart"></i>
+          <span class="badge" id="wishlist-count">0</span>
+        </div>
+
+        <div class="cart-icon" onclick="toggleCartPanel()">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="badge" id="cart-count">0</span>
+        </div>
+
+        <div id="user-auth-area">
+          <button class="login-btn-modern" onclick="window.location.href='login.html'" data-lang-key="login">تسجيل الدخول</button>
+        </div>
+        
+        <button class="menu-toggle" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+
+    <!-- Bottom Row (Links) -->
+    <div class="navbar-bottom">
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html" data-lang-key="home">الرئيسية</a></li>
+        <li><a href="index.html?type=store" class="active" data-lang-key="store">المتجر</a></li>
+        
+        <li class="dropdown">
+          <a href="index.html?type=phone" data-lang-key="phones">الموبايلات <i class="fas fa-chevron-down" style="font-size:10px; margin-right:5px;"></i></a>
+          <ul class="dropdown-menu" id="nav-brand-dropdown">
+            <!-- يتم تحميلها ديناميكياً -->
+          </ul>
+        </li>
+        
+        <li class="dropdown">
+          <a href="index.html?type=accessory" data-lang-key="accessories">الإكسسوارات <i class="fas fa-chevron-down" style="font-size:10px; margin-right:5px;"></i></a>
+          <ul class="dropdown-menu">
+            <li><a href="index.html?type=accessory&acc=airpods" data-lang-key="accAirpods">سماعات AirPods</a></li>
+            <li><a href="index.html?type=accessory&acc=covers" data-lang-key="accCovers">كفرات وأغطية</a></li>
+            <li><a href="index.html?type=accessory&acc=chargers" data-lang-key="accChargers">شواحن</a></li>
+          </ul>
+        </li>
+        
+        <li><a href="#footer" data-lang-key="contact">اتصل بنا</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+    <div class="container" id="product-container">
+        <div class="loading-spinner"><span data-lang-key="loadingError">حدث خطأ أثناء تحميل المنتج</span></div>
+    </div>
+
+    <div class="reviews-section animate__animated animate__fadeInUp" id="reviews-section">
+        <h2 data-lang-key="reviewsTitle">تقييمات العملاء</h2>
+        
+        <div class="reviews-container">
+            <!-- فورم كتابة تقييم -->
+            <div class="add-review-box">
+                <h3 data-lang-key="writeReview">اكتب تقييمك</h3>
+                <form id="review-form">
+                    <div class="rating-stars" id="rating-stars">
+                        <i class="far fa-star" data-value="1"></i>
+                        <i class="far fa-star" data-value="2"></i>
+                        <i class="far fa-star" data-value="3"></i>
+                        <i class="far fa-star" data-value="4"></i>
+                        <i class="far fa-star" data-value="5"></i>
+                    </div>
+                    <input type="hidden" id="review-rating" value="0">
+                    <textarea id="review-comment" data-lang-placeholder="reviewPlaceholder" data-lang-placeholder="reviewPlaceholder" placeholder="شاركنا رأيك في المنتج..." rows="4"></textarea>
+                    <button type="submit" class="submit-review-btn" data-lang-key="submitReview" data-lang-key="submitReview">إرسال التقييم</button>
+                </form>
+                <p id="review-login-msg" style="display: none; color: #ff4757; margin-top: 10px;" data-lang-key="loginToReview">يجب تسجيل الدخول لإضافة تقييم.</p>
+            </div>
+
+            <!-- عرض التقييمات -->
+            <div class="reviews-list" id="reviews-list">
+                <p class="loading-reviews"><span data-lang-key="loadingReviews">جاري تحميل التقييمات...</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="related-products animate__animated animate__fadeInUp">
+        <h2 data-lang-key="relatedTitle">منتجات قد تعجبك</h2>
+        <div class="related-grid" id="related-grid">
+        </div>
+    </div>
+
+<!-- WISHLIST PANEL -->
+<div id="wishlist-overlay" class="wishlist-overlay" onclick="toggleWishlistPanel()"></div>
+<div id="wishlist-panel" class="wishlist-panel">
+    <div class="wishlist-panel-header">
+        <h3><i class="fas fa-heart"></i> <span><span data-lang-key="wishlistTitle">❤️ قائمة المفضلة</span></span></h3>
+        <button class="wishlist-panel-close" onclick="toggleWishlistPanel()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="wishlist-panel-body" id="wishlist-panel-body"></div>
+</div>
+<!-- CART PANEL -->
+<div id="cart-panel" class="cart-panel">
+  <div class="cart-header">
+    <h3><span data-lang-key="cartTitle">🛒 سلة المشتريات</span></h3>
+    <span class="close-cart" onclick="toggleCartPanel()">✖</span>
+  </div>
+
+  <div id="cart-items" class="cart-items">
+    <p class="empty"><span data-lang-key="cartEmpty">السلة فارغة</span></p>
+  </div>
+
+  <div class="cart-footer">
+    <div class="total">
+      <span data-lang-key="totalLabel">الإجمالي:</span> <span id="cart-total">0</span> ج
+    </div>
+    <button class="checkout-btn" onclick="openCheckout()"><span data-lang-key="checkout" data-lang-key="checkout">إتمام الشراء</span></button>
+  </div>
+</div>
+
+<!-- اتمام الشراء -->
+<div id="checkout-modal" class="checkout-modal">
+    <div class="checkout-content">
+        <span class="close-modal" onclick="closeCheckout()">&times;</span>
+        
+        <div class="modal-header">
+            <h2><span data-lang-key="checkoutTitle">إتمام الطلب والدفع</span></h2>
+        </div>
+
+        <div class="modal-body">
+            
+            <div class="section-title"><span data-lang-key="shippingSection">1. بيانات الشحن والتواصل</span></div>
+            <div class="common-fields">
+                <input type="text" id="cust-name" data-lang-placeholder="fullName" placeholder="الاسم رباعي" required>
+                <input type="tel" id="cust-phone" data-lang-placeholder="phoneNumber" placeholder="رقم الموبايل الأساسي" required>
+                <input type="email" id="cust-email" data-lang-placeholder="emailOptional" placeholder="البريد الإلكتروني (اختياري)">
+                <input type="text" id="cust-address" data-lang-placeholder="fullAddress" placeholder="العنوان بالتفصيل (المحافظة - المنطقة - الشارع)" required>
+            </div>
+
+            <div class="section-title"><span data-lang-key="paymentSection">2. اختر وسيلة الدفع</span></div>
+            <div class="payment-methods-grid">
+                <label class="method-box">
+                    <input type="radio" name="payment" value="cash" checked onchange="changePaymentMethod()">
+                    <div class="box-content">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span><span data-lang-key="cashOnDelivery">دفع عند الاستلام</span></span>
+                    </div>
+                </label>
+
+                <label class="method-box">
+                    <input type="radio" name="payment" value="valu" onchange="changePaymentMethod()">
+                    <div class="box-content">
+                        <span style="font-weight:900; color:#00b894;">valU</span>
+                        <span><span data-lang-key="valuInstall">تقسيط فاليو</span></span>
+                    </div>
+                </label>
+
+                <label class="method-box">
+                    <input type="radio" name="payment" value="halan" onchange="changePaymentMethod()">
+                    <div class="box-content">
+                        <span style="font-weight:900; color:#eb3b5a;">Halan</span>
+                        <span><span data-lang-key="halanInstall">تقسيط حالا</span></span>
+                    </div>
+                </label>
+
+                <label class="method-box">
+                    <input type="radio" name="payment" value="instapay" onchange="changePaymentMethod()">
+                    <div class="box-content">
+                        <i class="fas fa-qrcode"></i>
+                        <span>InstaPay</span>
+                    </div>
+                </label>
+
+                <label class="method-box">
+                    <input type="radio" name="payment" value="vodafone" onchange="changePaymentMethod()">
+                    <div class="box-content">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span><span data-lang-key="vodafoneCash">فودافون كاش</span></span>
+                    </div>
+                </label>
+            </div>
+
+            <div class="payment-details-container">
+                
+                <div id="details-cash" class="details-section active">
+                    <p class="info-msg"><span data-lang-key="cashMsg">سيتم تحصيل المبلغ بالكامل نقداً عند توصيل الطلب لعنوانك.</span></p>
+                </div>
+
+                <div id="details-valu" class="details-section">
+                    <input type="text" data-lang-placeholder="valuName" placeholder="الاسم المسجل في فاليو">
+                    <input type="tel" data-lang-placeholder="valuPhone" placeholder="رقم موبايل حساب فاليو">
+                    <input type="number" data-lang-placeholder="nationalId" placeholder="الرقم القومي (14 رقم)">
+                </div>
+
+                <div id="details-halan" class="details-section">
+                    <input type="text" data-lang-placeholder="halanName" placeholder="الاسم المسجل في حالا">
+                    <input type="tel" data-lang-placeholder="halanPhone" placeholder="رقم موبايل حساب حالا">
+                    <input type="number" data-lang-placeholder="nationalId" placeholder="الرقم القومي (14 رقم)">
+                </div>
+
+                <div id="details-instapay" class="details-section">
+                    <p class="transfer-info"><span data-lang-key="instapayMsg">يرجى التحويل على عنوان الدفع التالي:<br> <strong>username@instapay</strong></span></p>
+                    <input type="text" data-lang-placeholder="paymentAddress" placeholder="عنوان الدفع الخاص بك (Payment Address)">
+                    <input type="text" data-lang-placeholder="transactionId" placeholder="رقم العملية المرجعي (Transaction ID)">
+                </div>
+
+                <div id="details-vodafone" class="details-section">
+                    <p class="transfer-info"><span data-lang-key="vodafoneMsg">يرجى التحويل على الرقم: <strong>010XXXXXXXX</strong></span></p>
+                    <input type="tel" data-lang-placeholder="walletNumber" placeholder="رقم المحفظة المحول منها">
+                    <p style="font-size:12px; color:#666;">قم بإرفاق سكرين شوت للتحويل (اختياري)</p>
+                    <input type="file" accept="image/*">
+                </div>
+
+            </div>
+
+            <div class="checkout-footer">
+                <div class="coupon-area">
+                    <input type="text" id="coupon-code" placeholder="كود الخصم">
+                    <button onclick="applyCoupon()"><span data-lang-key="applyCoupon" data-lang-key="applyCoupon">تطبيق</span></button>
+                </div>
+                <div class="total-area">
+                    <span><span data-lang-key="totalLabel">الإجمالي:</span></span>
+                    <span id="final-total">0 ج.م</span>
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="submitOrder()"><span data-lang-key="confirmOrder" data-lang-key="confirmOrder">تأكيد الطلب الآن</span></button>
+        </div>
+    </div>
+</div>
+
+
+
+    
+    
+    <footer>
+        <p data-lang-key="footerText">جميع الحقوق محفوظة &copy; 2026 CrownMob</p>
+    </footer>
+
+    <script src="lang.js"></script>
+    <script src="product.js"></script>
+    <script src="notifications.js"></script>
+    <script src="search_dropdown.js"></script>
+</body>
+</html>

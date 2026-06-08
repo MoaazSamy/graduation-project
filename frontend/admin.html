@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - 👑 CrownMob Admin</title>
+    <meta name="description" content="لوحة تحكم الأدمن لإدارة المنتجات والمخزون في HTI Store">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">👑 CrownMob</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><span data-lang-key="home">الرئيسية</span></a></li>
+            <li><a href="admin.html" class="active"><span data-lang-key="adminPanelTitle">لوحة التحكم</span></a></li>
+        </ul>
+        <div class="nav-right">
+            <label class="theme-switch">
+                <input type="checkbox" id="theme-toggle" onclick="toggleTheme()">
+                <span class="slider">
+                    <i class="fas fa-sun sun-icon"></i>
+                    <i class="fas fa-moon moon-icon"></i>
+                </span>
+            </label>
+            <button class="lang-btn" onclick="toggleLanguage()">EN</button>
+            <div id="user-auth-area">
+                <button class="login-btn" onclick="openLoginPage()"><span data-lang-key="login">تسجيل
+                        الدخول</span></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ADMIN SIDEBAR TOGGLE (Mobile) -->
+    <button class="admin-sidebar-toggle" onclick="toggleAdminSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="admin-sidebar-overlay" id="admin-sidebar-overlay" onclick="toggleAdminSidebar()"></div>
+
+    <!-- ADMIN PANEL -->
+    <div class="admin-wrapper">
+
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar animate__animated animate__fadeInRight">
+            <div class="admin-brand">
+                <div class="admin-brand-icon">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <h3 id="admin-name">Admin Panel</h3>
+                <p><span data-lang-key="adminPanelTitle">لوحة إدارة المتجر</span></p>
+                <span class="admin-role-badge"><i class="fas fa-crown"></i> مدير</span>
+            </div>
+
+            <ul class="admin-nav">
+                <li class="active" data-tab="dashboard" onclick="switchAdminTab('dashboard', this)">
+                    <i class="fas fa-chart-pie"></i>
+                    <span><span data-lang-key="dashboard">لوحة المعلومات</span></span>
+                </li>
+                <li data-tab="add-product" onclick="switchAdminTab('add-product', this)">
+                    <i class="fas fa-plus-circle"></i>
+                    <span><span data-lang-key="addProduct">إضافة منتج</span></span>
+                </li>
+                <li data-tab="products-list" onclick="switchAdminTab('products-list', this)">
+                    <i class="fas fa-boxes-stacked"></i>
+                    <span><span data-lang-key="products">المنتجات</span></span>
+                    <span class="nav-count" id="nav-products-count">0</span>
+                </li>
+                <li data-tab="orders" onclick="switchAdminTab('orders', this)">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span><span data-lang-key="ordersTab">الطلبات</span></span>
+                    <span class="nav-count orders-count" id="nav-orders-count">0</span>
+                </li>
+                <li data-tab="coupons" onclick="switchAdminTab('coupons', this)">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span><span data-lang-key="couponsTab">الكوبونات</span></span>
+                </li>
+                <li data-tab="customers" onclick="switchAdminTab('customers', this)">
+                    <i class="fas fa-users"></i>
+                    <span><span data-lang-key="customersTab">العملاء</span></span>
+                    <span class="nav-count" id="nav-customers-count">0</span>
+                </li>
+                <div class="nav-divider"></div>
+                <li class="back-to-store" onclick="window.location.href='index.html'">
+                    <i class="fas fa-store"></i>
+                    <span><span data-lang-key="backToStore">العودة للمتجر</span></span>
+                </li>
+                <li class="logout-item" onclick="logout()" style="color: #ff4757; margin-top: 10px;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span><span data-lang-key="logout">تسجيل الخروج</span></span>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="admin-main">
+
+            <!-- TAB: Dashboard -->
+            <section id="tab-dashboard" class="admin-tab active">
+                <div class="admin-tab-header">
+                    <h2><i class="fas fa-chart-pie"></i> <span data-lang-key="dashboard">لوحة المعلومات</span></h2>
+                    <p><span data-lang-key="dashboardDesc">نظرة سريعة على أداء متجرك</span></p>
+                </div>
+
+                <!-- Stats Row 1 - Main Stats -->
+                <div class="admin-stats-row">
+                    <div class="admin-stat-card">
+                        <div class="astat-icon orange">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="astat-info">
+                            <span class="astat-num" id="total-products">0</span>
+                            <span class="astat-label"><span data-lang-key="totalProducts">إجمالي المنتجات</span></span>
+                        </div>
+                        <span class="stat-trend up" id="trend-products"><i class="fas fa-arrow-up"></i></span>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="astat-icon blue">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="astat-info">
+                            <span class="astat-num" id="dash-orders-total">0</span>
+                            <span class="astat-label"><span data-lang-key="totalOrdersAdmin">إجمالي
+                                    الطلبات</span></span>
+                        </div>
+                        <span class="stat-trend up" id="trend-orders"><i class="fas fa-arrow-up"></i></span>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="astat-icon green">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="astat-info">
+                            <span class="astat-num" id="dash-revenue">0</span>
+                            <span class="astat-label"><span data-lang-key="ordersRevenue">إجمالي الإيرادات</span></span>
+                        </div>
+                        <span class="stat-trend up" id="trend-revenue"><i class="fas fa-arrow-up"></i></span>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="astat-icon purple">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="astat-info">
+                            <span class="astat-num" id="dash-latest-count">0</span>
+                            <span class="astat-label"><span data-lang-key="isLatestProduct">منتجات مميزة</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Row 2 - Secondary -->
+                <div class="admin-stats-row secondary-stats">
+                    <div class="admin-stat-card mini">
+                        <div class="astat-icon-mini orange"><i class="fas fa-layer-group"></i></div>
+                        <div class="astat-info">
+                            <span class="astat-num" id="total-categories">0</span>
+                            <span class="astat-label"><span data-lang-key="categories">الأقسام</span></span>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card mini">
+                        <div class="astat-icon-mini blue"><i class="fas fa-warehouse"></i></div>
+                        <div class="astat-info">
+                            <span class="astat-num" id="total-stock">0</span>
+                            <span class="astat-label"><span data-lang-key="totalStock">إجمالي المخزون</span></span>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card mini">
+                        <div class="astat-icon-mini red"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="astat-info">
+                            <span class="astat-num" id="low-stock">0</span>
+                            <span class="astat-label"><span data-lang-key="lowStock">مخزون منخفض</span></span>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card mini">
+                        <div class="astat-icon-mini green"><i class="fas fa-clock"></i></div>
+                        <div class="astat-info">
+                            <span class="astat-num" id="dash-pending-orders">0</span>
+                            <span class="astat-label"><span data-lang-key="pendingOrders">طلبات معلقة</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Grid - Two Columns -->
+                <div class="dash-grid">
+                    <!-- Left Column: Recent Orders + Best Sellers -->
+                    <div class="dash-left-col">
+                        <!-- Recent Orders -->
+                        <div class="admin-card dash-card">
+                            <div class="admin-card-header">
+                                <h3><i class="fas fa-receipt"></i> <span data-lang-key="recentOrders">أحدث
+                                        الطلبات</span></h3>
+                                <button class="dash-view-all-btn"
+                                    onclick="switchAdminTab('orders', document.querySelector('[data-tab=orders]'))">
+                                    <span data-lang-key="viewAll">عرض الكل</span> <i class="fas fa-arrow-left"></i>
+                                </button>
+                            </div>
+                            <div class="dash-orders-list" id="dash-recent-orders">
+                                <div class="dash-empty">
+                                    <i class="fas fa-inbox"></i>
+                                    <p>لا توجد طلبات حتى الآن</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Best Sellers -->
+                        <div class="admin-card dash-card">
+                            <div class="admin-card-header">
+                                <h3><i class="fas fa-fire"></i> <span data-lang-key="bestSellers">الأكثر مبيعاً</span>
+                                </h3>
+                            </div>
+                            <div class="dash-best-sellers" id="dash-best-sellers">
+                                <div class="dash-empty">
+                                    <i class="fas fa-chart-line"></i>
+                                    <p>لا توجد بيانات مبيعات</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Top Products + Quick Actions -->
+                    <div class="dash-right-col">
+                        <!-- Top Products -->
+                        <div class="admin-card dash-card">
+                            <div class="admin-card-header">
+                                <h3><i class="fas fa-trophy"></i> <span data-lang-key="topProducts">أعلى المنتجات
+                                        سعراً</span></h3>
+                            </div>
+                            <div class="dash-top-products" id="dash-top-products">
+                                <div class="dash-empty">
+                                    <i class="fas fa-box-open"></i>
+                                    <p>لا توجد منتجات</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="admin-card dash-card">
+                            <div class="admin-card-header">
+                                <h3><i class="fas fa-bolt"></i> <span data-lang-key="quickActions">إجراءات سريعة</span>
+                                </h3>
+                            </div>
+                            <div class="dash-quick-actions">
+                                <button class="quick-action-btn"
+                                    onclick="switchAdminTab('add-product', document.querySelector('[data-tab=add-product]'))">
+                                    <div class="qa-icon orange"><i class="fas fa-plus"></i></div>
+                                    <span data-lang-key="addProduct">إضافة منتج</span>
+                                </button>
+                                <button class="quick-action-btn"
+                                    onclick="switchAdminTab('products-list', document.querySelector('[data-tab=products-list]'))">
+                                    <div class="qa-icon blue"><i class="fas fa-boxes-stacked"></i></div>
+                                    <span data-lang-key="products">المنتجات</span>
+                                </button>
+                                <button class="quick-action-btn"
+                                    onclick="switchAdminTab('orders', document.querySelector('[data-tab=orders]'))">
+                                    <div class="qa-icon green"><i class="fas fa-clipboard-list"></i></div>
+                                    <span data-lang-key="ordersTab">الطلبات</span>
+                                </button>
+                                <button class="quick-action-btn" onclick="window.location.href='index.html'">
+                                    <div class="qa-icon purple"><i class="fas fa-store"></i></div>
+                                    <span data-lang-key="backToStore">المتجر</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Charts -->
+                <div class="dash-grid" style="margin-top: 25px;">
+                    <div class="admin-card dash-card">
+                        <div class="admin-card-header">
+                            <h3><i class="fas fa-chart-area"></i> <span>المبيعات خلال آخر 7 أيام</span></h3>
+                        </div>
+                        <div style="padding: 15px; height: 300px; display: flex; justify-content: center; width: 100%;">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="admin-card dash-card">
+                        <div class="admin-card-header">
+                            <h3><i class="fas fa-chart-pie"></i> <span>حالات الطلبات</span></h3>
+                        </div>
+                        <div style="padding: 15px; height: 300px; display: flex; justify-content: center; width: 100%;">
+                            <canvas id="orderStatusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB: Add Product -->
+            <section id="tab-add-product" class="admin-tab">
+                <div class="admin-tab-header">
+                    <h2><i class="fas fa-plus-circle"></i> <span data-lang-key="addNewProduct">إضافة منتج جديد</span>
+                    </h2>
+                    <p><span data-lang-key="addProductDesc">أدخل بيانات المنتج الجديد لإضافته للمتجر</span></p>
+                </div>
+
+                <!-- Edit Mode Banner -->
+                <div class="edit-mode-banner" id="edit-mode-banner">
+                    <i class="fas fa-pen-to-square"></i>
+                    <span><span data-lang-key="editModeBanner">أنت في وضع التعديل - تعديل المنتج:</span> <strong
+                            id="editing-product-name"></strong></span>
+                    <button class="cancel-edit-mode" onclick="cancelEditMode()"><span data-lang-key="cancelEdit">إلغاء
+                            التعديل</span></button>
+                </div>
+
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-info-circle"></i> <span data-lang-key="productData">بيانات المنتج</span>
+                        </h3>
+                    </div>
+
+                    <form id="product-form" enctype="multipart/form-data">
+
+                        <!-- Product Type Selector -->
+                        <div class="product-type-selector" id="product-type-selector">
+                            <label class="type-selector-label"><i class="fas fa-shapes"></i> <span
+                                    data-lang-key="selectProductType">اختر نوع المنتج</span></label>
+                            <div class="type-cards">
+                                <div class="type-card active" id="type-card-phone" onclick="selectProductType('phone')">
+                                    <div class="type-card-icon"><i class="fas fa-mobile-alt"></i></div>
+                                    <div class="type-card-title"><span data-lang-key="typePhone">هاتف / موبايل</span>
+                                    </div>
+                                    <div class="type-card-desc"><span data-lang-key="typePhoneDesc">مواصفات تقنية
+                                            كاملة</span></div>
+                                </div>
+                                <div class="type-card" id="type-card-accessory"
+                                    onclick="selectProductType('accessory')">
+                                    <div class="type-card-icon"><i class="fas fa-headphones"></i></div>
+                                    <div class="type-card-title"><span data-lang-key="typeAccessory">إكسسوارات</span>
+                                    </div>
+                                    <div class="type-card-desc"><span data-lang-key="typeAccessoryDesc">سماعات، كفرات،
+                                            شواحن</span></div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="prod-product-type" value="phone">
+                        </div>
+
+                        <!-- Accessory Sub-type Selector (hidden by default) -->
+                        <div class="accessory-type-section" id="accessory-type-section" style="display: none;">
+                            <label class="type-selector-label"><i class="fas fa-list"></i> <span
+                                    data-lang-key="selectAccessoryType">حدد نوع الإكسسوار</span></label>
+                            <div class="accessory-type-cards">
+                                <div class="acc-type-card" data-acc-type="airpods"
+                                    onclick="selectAccessoryType('airpods', this)">
+                                    <i class="fas fa-headphones"></i>
+                                    <span data-lang-key="accAirpods">سماعات AirPods</span>
+                                </div>
+                                <div class="acc-type-card" data-acc-type="covers"
+                                    onclick="selectAccessoryType('covers', this)">
+                                    <i class="fas fa-shield-halved"></i>
+                                    <span data-lang-key="accCovers">كفرات وأغطية</span>
+                                </div>
+                                <div class="acc-type-card" data-acc-type="chargers"
+                                    onclick="selectAccessoryType('chargers', this)">
+                                    <i class="fas fa-plug"></i>
+                                    <span data-lang-key="accChargers">شواحن</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="prod-accessory-type" value="">
+                        </div>
+
+                        <div class="product-form-grid">
+
+                            <div class="form-group">
+                                <label><i class="fas fa-tag"></i> <span data-lang-key="productName">اسم
+                                        المنتج</span></label>
+                                <input type="text" id="prod-name" placeholder="مثال: iPhone 15 Pro Max" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fas fa-folder"></i> <span data-lang-key="category">القسم</span></label>
+                                <select id="prod-category" required>
+                                    <option value=""><span data-lang-key="selectCategory">-- اختر القسم --</span>
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fas fa-coins"></i> السعر الحالي (ج.م)</label>
+                                <input type="number" id="prod-price" placeholder="مثال: 45000" min="0" step="0.01"
+                                    required oninput="calcDiscount()">
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fas fa-cubes"></i> <span data-lang-key="availableQuantity">الكمية
+                                        المتاحة</span></label>
+                                <input type="number" id="prod-stock" placeholder="مثال: 50" min="0" required>
+                            </div>
+
+                            <!-- Discount Section -->
+                            <div class="form-group discount-section">
+                                <label><i class="fas fa-tag" style="color:#ff4757;"></i> السعر الأصلي (قبل الخصم) —
+                                    اتركه فارغاً لو مفيش خصم</label>
+                                <input type="number" id="prod-original-price" placeholder="مثال: 55000" min="0"
+                                    step="0.01" oninput="calcDiscount()">
+                            </div>
+
+                            <div class="form-group discount-section">
+                                <label><i class="fas fa-percent" style="color:#ff4757;"></i> نسبة الخصم (%)</label>
+                                <div class="discount-input-row">
+                                    <input type="number" id="prod-discount-percent" placeholder="مثال: 20" min="0"
+                                        max="99" step="1" oninput="calcFromPercent()">
+                                    <div class="discount-preview" id="discount-preview" style="display:none;">
+                                        <i class="fas fa-fire"></i>
+                                        <span id="discount-preview-text"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group"
+                                style="display: flex; align-items: center; gap: 10px; margin-top: 25px;">
+                                <input type="checkbox" id="prod-is-latest"
+                                    style="width: 20px; height: 20px; accent-color: #ff9900;">
+                                <label for="prod-is-latest"
+                                    style="margin: 0; cursor: pointer; color: var(--text-color);">
+                                    <i class="fas fa-star" style="color: #ff9900;"></i>
+                                    <span data-lang-key="isLatestProduct">عرض في قسم "أحدث المنتجات" (الرئيسية)</span>
+                                </label>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label><i class="fas fa-align-left"></i> <span data-lang-key="productDescription">وصف
+                                        المنتج</span></label>
+                                <textarea id="prod-description" placeholder="اكتب وصف تفصيلي للمنتج..."
+                                    required></textarea>
+                            </div>
+
+                            <!-- Technical Specifications (Phone Only) -->
+                            <div id="phone-specs-section">
+                                <div class="form-group full-width">
+                                    <label style="font-size: 17px; margin-bottom: 10px; color: #ff9900;"><i
+                                            class="fas fa-microchip"></i> <span data-lang-key="techSpecs">المواصفات
+                                            التقنية</span></label>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><i class="fas fa-mobile-screen"></i> <span
+                                            data-lang-key="screenLabel">الشاشة</span></label>
+                                    <input type="text" id="prod-screen" placeholder="مثال: 6.7 بوصة Super AMOLED">
+                                </div>
+
+                                <div class="form-group">
+                                    <label><i class="fas fa-bolt"></i> <span
+                                            data-lang-key="processorLabel">المعالج</span></label>
+                                    <input type="text" id="prod-processor" placeholder="مثال: Snapdragon 8 Gen 3">
+                                </div>
+
+                                <div class="form-group">
+                                    <label><i class="fas fa-camera"></i> <span
+                                            data-lang-key="cameraLabel">الكاميرا</span></label>
+                                    <input type="text" id="prod-camera" placeholder="مثال: 200MP + 12MP + 50MP">
+                                </div>
+
+                                <div class="form-group">
+                                    <label><i class="fas fa-battery-full"></i> <span
+                                            data-lang-key="batteryLabel">البطارية</span></label>
+                                    <input type="text" id="prod-battery" placeholder="مثال: 5000 mAh">
+                                </div>
+
+                                <div class="form-group">
+                                    <label><i class="fas fa-memory"></i> <span
+                                            data-lang-key="ramLabel">الرام</span></label>
+                                    <input type="text" id="prod-ram" placeholder="مثال: 12GB">
+                                </div>
+
+                                <div class="form-group">
+                                    <label><i class="fas fa-hard-drive"></i> <span data-lang-key="storageLabel">التخزين
+                                            الأساسي</span></label>
+                                    <input type="text" id="prod-storage" placeholder="مثال: 256GB">
+                                </div>
+
+                                <div class="form-group full-width storage-options-section"
+                                    style="background: var(--card-bg); padding: 18px; border-radius: 12px; border: 1.5px dashed var(--border-color);">
+                                    <label style="font-size: 15px; color: #00b894; margin-bottom: 15px;">
+                                        <i class="fas fa-layer-group"></i> خيارات المساحات والأسعار المختلفة (اختياري)
+                                    </label>
+                                    <div id="storage-options-container"
+                                        style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;">
+                                        <!-- Dynamic list of storages -->
+                                    </div>
+                                    <div class="storage-inputs" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                        <input type="text" id="new-storage-name" placeholder="المساحة (مثال: 256GB)"
+                                            style="flex: 1; min-width: 120px;">
+                                        <input type="number" id="new-storage-price" placeholder="السعر المخصص"
+                                            style="flex: 1; min-width: 120px;">
+                                        <button type="button" class="btn"
+                                            style="background: #00b894; color: white; border: none; border-radius: 8px; cursor: pointer; padding: 12px 20px; font-weight: bold; flex: 0 1 auto;"
+                                            onclick="addStorageOption()">
+                                            <i class="fas fa-plus"></i> إضافة
+                                        </button>
+                                    </div>
+                                    <small
+                                        style="color: var(--text-color); opacity: 0.7; display: block; margin-top: 10px;">أضف
+                                        أكثر من مساحة ليتمكن العميل من اختيارها وسيتحدث السعر تلقائياً. إذا كان للموبايل
+                                        مساحة واحدة، يمكنك الاكتفاء بمربع "التخزين الأساسي" فوق.</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><i class="fab fa-android"></i> <span data-lang-key="osLabel">نظام
+                                            التشغيل</span></label>
+                                    <input type="text" id="prod-os" placeholder="مثال: Android 14 / iOS 17">
+                                </div>
+
+                                <!-- Additional Details (Phone Only) -->
+                                <div class="form-group">
+                                    <label><i class="fas fa-weight-hanging"></i> <span data-lang-key="weightOpt">الوزن
+                                            (اختياري)</span></label>
+                                    <input type="text" id="prod-weight" placeholder="مثال: 221 جرام">
+                                </div>
+
+                                <div class="form-group">
+                                    <label><i class="fas fa-barcode"></i> <span data-lang-key="skuOpt">رمز المنتج SKU
+                                            (اختياري)</span></label>
+                                    <input type="text" id="prod-sku" placeholder="مثال: IPH15PM-BLK-256">
+                                </div>
+
+                                <div class="form-group">
+                                    <label><i class="fas fa-star"></i> <span data-lang-key="brandOpt">العلامة التجارية
+                                            (اختياري)</span></label>
+                                    <input type="text" id="prod-brand" placeholder="مثال: Apple">
+                                </div>
+                            </div>
+
+                            <!-- Color Picker (Shared) -->
+                            <div class="form-group">
+                                <label><i class="fas fa-palette"></i> <span data-lang-key="colorOpt">الألوان
+                                        (اختياري)</span></label>
+                                <div class="color-picker-wrapper"
+                                    style="display: flex; gap: 12px; align-items: center; margin-bottom: 15px; background: var(--input-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--border-color);">
+                                    <input type="color" id="color-picker" value="#000000"
+                                        style="width: 45px; height: 45px; padding: 2px; border: 2px solid var(--border-color); border-radius: 8px; cursor: pointer; background: transparent; transition: 0.3s;">
+                                    <button type="button" class="btn-add-color" onclick="addColor()"
+                                        style="padding: 10px 20px; background: linear-gradient(135deg, #ff9900, #ff6b00); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: all 0.3s ease;"
+                                        onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(0,0,0,0.2)';"
+                                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.15)';">
+                                        <i class="fas fa-plus-circle" style="font-size: 16px;"></i> إضافة هذا اللون
+                                    </button>
+                                </div>
+                                <div id="selected-colors-container" class="selected-colors"
+                                    style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                                <input type="hidden" id="prod-color">
+                            </div>
+
+                            <!-- Image Upload (Shared) -->
+                            <div class="form-group full-width">
+                                <label><i class="fas fa-image"></i> <span data-lang-key="productImage">صورة
+                                        المنتج</span></label>
+                                <div class="image-upload-area" id="upload-area"
+                                    onclick="document.getElementById('prod-image').click()">
+                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                    <p><span data-lang-key="dragImage">اسحب الصورة هنا أو</span> <span
+                                            class="browse-text"><span data-lang-key="browseFile">اختر ملف</span></span>
+                                    </p>
+                                    <p style="font-size: 12px; margin-top: 8px; opacity: 0.6;"><span
+                                            data-lang-key="uploadLimit">PNG, JPG, WEBP — حد أقصى 5MB</span></p>
+                                    <input type="file" id="prod-image" accept="image/*">
+                                </div>
+                                <div class="image-preview-container" id="image-preview-container">
+                                    <img id="image-preview" src="" alt="معاينة الصورة">
+                                    <button type="button" class="remove-image-btn" onclick="removeImage(event)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Gallery Upload (Shared) -->
+                            <div class="form-group full-width" style="margin-top: 15px;">
+                                <label><i class="fas fa-images"></i> <span data-lang-key="productGallery">ألبوم صور
+                                        إضافية (اختياري)</span></label>
+                                <input type="file" id="inp-gallery" accept="image/*" multiple
+                                    style="width: 100%; padding: 12px; border: 2px dashed var(--border-color); border-radius: 10px; background: var(--input-bg); color: var(--text-color); cursor: pointer; transition: 0.3s;">
+                                <small style="color: #888; font-size: 13px; margin-top: 5px; display: block;">يمكنك
+                                    اختيار أكثر من صورة دفعة واحدة بالضغط على زر Ctrl + تحديد الصور.</small>
+                                <div id="existing-gallery-container"
+                                    style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="submit-product-btn" id="submit-btn">
+                                <span class="btn-text"><i class="fas fa-plus"></i> <span
+                                        data-lang-key="btnAddProduct">إضافة المنتج</span></span>
+                                <span class="spinner"></span>
+                            </button>
+                            <button type="button" class="reset-form-btn" onclick="resetForm()">
+                                <i class="fas fa-redo"></i> <span data-lang-key="clearFields">مسح الحقول</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- TAB: Products List -->
+            <section id="tab-products-list" class="admin-tab">
+                <div class="admin-tab-header">
+                    <h2><i class="fas fa-boxes-stacked"></i> <span data-lang-key="manageProducts">إدارة المنتجات</span>
+                    </h2>
+                    <p><span data-lang-key="manageProductsDesc">عرض وتعديل وحذف المنتجات</span></p>
+                </div>
+
+                <div class="admin-card">
+                    <div class="table-toolbar">
+                        <div class="table-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="table-search-input" placeholder="ابحث عن منتج...">
+                        </div>
+                        <button class="add-product-shortcut"
+                            onclick="switchAdminTab('add-product', document.querySelector('[data-tab=add-product]'))">
+                            <i class="fas fa-plus"></i> <span data-lang-key="addProduct">إضافة منتج</span>
+                        </button>
+                    </div>
+
+                    <div class="products-table-wrapper">
+                        <table class="products-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th><span data-lang-key="image">الصورة</span></th>
+                                    <th><span data-lang-key="productName">اسم المنتج</span></th>
+                                    <th><span data-lang-key="category">القسم</span></th>
+                                    <th><span data-lang-key="price">السعر</span></th>
+                                    <th><span data-lang-key="stock">المخزون</span></th>
+                                    <th><span data-lang-key="actions">إجراءات</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="all-products-body">
+                                <tr>
+                                    <td colspan="7" class="empty-table">
+                                        <i class="fas fa-box-open"></i>
+                                        <h3>جاري التحميل...</h3>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-pagination" id="table-pagination"></div>
+                </div>
+            </section>
+
+            <!-- TAB: Orders Management -->
+            <section id="tab-orders" class="admin-tab">
+                <div class="admin-tab-header">
+                    <h2><i class="fas fa-clipboard-list"></i> <span data-lang-key="manageOrders">إدارة الطلبات</span>
+                    </h2>
+                    <p><span data-lang-key="manageOrdersDesc">عرض وإدارة جميع طلبات العملاء</span></p>
+                </div>
+
+                <!-- Orders Stats -->
+                <div class="admin-stats-row">
+                    <div class="admin-stat-card">
+                        <div class="astat-icon orange">
+                            <i class="fas fa-receipt"></i>
+                        </div>
+                        <div class="astat-info">
+                            <span class="astat-num" id="orders-total-count">0</span>
+                            <span class="astat-label"><span data-lang-key="totalOrdersAdmin">إجمالي
+                                    الطلبات</span></span>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="astat-icon" style="background: linear-gradient(135deg, #fdcb6e, #f39c12);">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="astat-info">
+                            <span class="astat-num" id="orders-pending-count">0</span>
+                            <span class="astat-label"><span data-lang-key="pendingOrders">طلبات معلقة</span></span>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="astat-icon blue">
+                            <i class="fas fa-spinner"></i>
+                        </div>
+                        <div class="astat-info">
+                            <span class="astat-num" id="orders-processing-count">0</span>
+                            <span class="astat-label"><span data-lang-key="processingOrders">جاري التجهيز</span></span>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="astat-icon green">
+                            <i class="fas fa-check-double"></i>
+                        </div>
+                        <div class="astat-info">
+                            <span class="astat-num" id="orders-delivered-count">0</span>
+                            <span class="astat-label"><span data-lang-key="deliveredOrders">تم التوصيل</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Filters & Search -->
+                <div class="admin-card">
+                    <div class="orders-toolbar">
+                        <div class="orders-filters" id="orders-filters">
+                            <button class="order-filter-btn active" onclick="filterAdminOrders('all', this)"><span
+                                    data-lang-key="allOrders">الكل</span></button>
+                            <button class="order-filter-btn filter-pending"
+                                onclick="filterAdminOrders('pending', this)"><span data-lang-key="statusPending">قيد
+                                    الانتظار</span></button>
+                            <button class="order-filter-btn filter-processing"
+                                onclick="filterAdminOrders('processing', this)"><span
+                                    data-lang-key="statusProcessing">جاري التجهيز</span></button>
+                            <button class="order-filter-btn filter-shipped"
+                                onclick="filterAdminOrders('shipped', this)"><span data-lang-key="statusShipped">تم
+                                    الشحن</span></button>
+                            <button class="order-filter-btn filter-delivered"
+                                onclick="filterAdminOrders('delivered', this)"><span data-lang-key="statusDelivered">تم
+                                    التوصيل</span></button>
+                            <button class="order-filter-btn filter-completed"
+                                onclick="filterAdminOrders('completed', this)"><span
+                                    data-lang-key="statusCompleted">مكتمل</span></button>
+                            <button class="order-filter-btn filter-cancelled"
+                                onclick="filterAdminOrders('cancelled', this)"><span
+                                    data-lang-key="statusCancelled">ملغي</span></button>
+                        </div>
+                        <div class="table-search orders-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="orders-search-input" placeholder="ابحث برقم الطلب أو اسم العميل..."
+                                data-lang-placeholder="searchOrderPh">
+                        </div>
+                    </div>
+
+                    <div class="products-table-wrapper">
+                        <table class="products-table orders-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th><span data-lang-key="customer">العميل</span></th>
+                                    <th><span data-lang-key="orderItems">المنتجات</span></th>
+                                    <th><span data-lang-key="price">الإجمالي</span></th>
+                                    <th><span data-lang-key="orderDate">تاريخ الطلب</span></th>
+                                    <th><span data-lang-key="orderStatus">الحالة</span></th>
+                                    <th><span data-lang-key="actions">إجراءات</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-orders-body">
+                                <tr>
+                                    <td colspan="7" class="empty-table">
+                                        <i class="fas fa-clipboard-list"></i>
+                                        <h3>جاري التحميل...</h3>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB: Coupons Management -->
+            <section id="tab-coupons" class="admin-tab">
+                <div class="admin-tab-header">
+                    <h2><i class="fas fa-ticket-alt"></i> <span data-lang-key="manageCoupons">إدارة الكوبونات</span></h2>
+                    <p><span data-lang-key="manageCouponsDesc">إضافة وتعديل وحذف كوبونات الخصم</span></p>
+                </div>
+
+                <div class="admin-card" style="margin-bottom: 20px;">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-plus"></i> <span data-lang-key="addNewCoupon">إضافة كوبون جديد</span></h3>
+                    </div>
+                    <form id="coupon-form" style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end; padding: 20px;">
+                        <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
+                            <label><i class="fas fa-tag"></i> <span data-lang-key="couponCodeAdmin">كود الخصم</span></label>
+                            <input type="text" id="coupon-code-input" placeholder="مثال: NEW2026" required>
+                        </div>
+                        <div class="form-group" style="flex: 1; min-width: 150px; margin-bottom: 0;">
+                            <label><i class="fas fa-percent"></i> <span data-lang-key="discountPercent">نسبة الخصم (%)</span></label>
+                            <input type="number" id="coupon-discount-input" placeholder="مثال: 15" min="1" max="100" required>
+                        </div>
+                        <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
+                            <label><i class="far fa-calendar-alt"></i> <span data-lang-key="validUntilOpt">تاريخ الصلاحية (اختياري)</span></label>
+                            <input type="datetime-local" id="coupon-valid-until-input">
+                        </div>
+                        <div class="form-group" style="flex: 0 0 auto; margin-bottom: 0;">
+                            <button type="submit" class="submit-product-btn" style="padding: 12px 25px;"><i class="fas fa-plus"></i> <span data-lang-key="btnAddCoupon">إضافة الكوبون</span></button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="admin-card">
+                    <div class="products-table-wrapper">
+                        <table class="products-table">
+                            <thead>
+                                <tr>
+                                    <th data-lang-key="couponCodeCol">الكود</th>
+                                    <th data-lang-key="discountCol">نسبة الخصم</th>
+                                    <th data-lang-key="validUntilCol">تاريخ الصلاحية</th>
+                                    <th data-lang-key="statusCol">الحالة</th>
+                                    <th data-lang-key="actionsCol">إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-coupons-body">
+                                <tr>
+                                    <td colspan="5" class="empty-table">
+                                        <i class="fas fa-ticket-alt"></i>
+                                        <h3>جاري التحميل...</h3>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB: Customers Management -->
+            <section id="tab-customers" class="admin-tab">
+                <div class="admin-tab-header">
+                    <h2><i class="fas fa-users"></i> <span data-lang-key="manageCustomers">إدارة العملاء</span></h2>
+                    <p><span data-lang-key="manageCustomersDesc">عرض العملاء المسجلين وتحديد شارة العميل المميز</span></p>
+                </div>
+
+                <div class="admin-card">
+                    <div class="table-search orders-search" style="margin-bottom: 15px;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="customers-search-input" data-lang-placeholder="searchCustomerPh" placeholder="ابحث باسم العميل أو البريد الإلكتروني...">
+                    </div>
+                    <div class="products-table-wrapper">
+                        <table class="products-table">
+                            <thead>
+                                <tr>
+                                    <th data-lang-key="hashCol">#</th>
+                                    <th data-lang-key="customerNameCol">اسم العميل</th>
+                                    <th data-lang-key="emailCol">البريد الإلكتروني</th>
+                                    <th data-lang-key="regDateCol">تاريخ التسجيل</th>
+                                    <th data-lang-key="premiumCol">عميل مميز (Premium)</th>
+                                    <th data-lang-key="roleCol">الرتبة</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-customers-body">
+                                <tr>
+                                    <td colspan="6" class="empty-table">
+                                        <i class="fas fa-users"></i>
+                                        <h3>جاري التحميل...</h3>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- DELETE CONFIRMATION MODAL -->
+    <div class="delete-modal-overlay" id="delete-modal">
+        <div class="delete-modal-box">
+            <i class="fas fa-trash-alt warning-icon"></i>
+            <h3><span data-lang-key="deleteProductTitle">حذف المنتج</span></h3>
+            <p>هل أنت متأكد من حذف "<span id="delete-product-name"></span>"؟ لا يمكن التراجع عن هذا الإجراء.</p>
+            <div class="delete-modal-btns">
+                <button class="confirm-delete-btn" id="confirm-delete-btn" onclick="confirmDelete()">
+                    <i class="fas fa-trash"></i> <span data-lang-key="yesDelete">نعم، احذف</span>
+                </button>
+                <button class="cancel-delete-btn" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i> <span data-lang-key="cancelBtn">إلغاء</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER DETAIL MODAL -->
+    <div class="order-detail-overlay" id="order-detail-modal">
+        <div class="order-detail-box">
+            <div class="order-detail-header">
+                <h3><i class="fas fa-receipt"></i> <span data-lang-key="orderDetailTitle">تفاصيل الطلب</span> <span
+                        id="order-detail-id"></span></h3>
+                <button class="close-order-detail" onclick="closeOrderDetail()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="order-detail-body" id="order-detail-body">
+                <!-- Filled by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- SUCCESS OVERLAY -->
+    <div class="success-overlay" id="success-overlay">
+        <div class="success-box">
+            <div class="check-circle">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3 id="success-title"><span data-lang-key="successTitle">تم بنجاح!</span></h3>
+            <p id="success-message"><span data-lang-key="successMsg">تم إضافة المنتج بنجاح</span></p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 CrownMob - Admin Panel</p>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="lang.js"></script>
+    <script src="admin.js"></script>
+    <script src="notifications.js"></script>
+</body>
+
+</html>

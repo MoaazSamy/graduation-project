@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Signup Form</title>
+    <link rel="stylesheet" href="login.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="form-box login">
+            <form action="#" id="login-form">
+
+                <h1 data-lang-key="loginTitle">Login</h1>
+                <div class="input-box">
+                    <input type="text" id="login-username" data-lang-placeholder="usernamePh" placeholder="Username" required>
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="login-password" data-lang-placeholder="passwordPh" placeholder="Password" required>
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+                <div class="forgot-link">
+                    <a href="#" data-lang-key="forgotPassword">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn" data-lang-key="loginTitle">Login</button>
+                <p data-lang-key="loginWithSocial">or login with social platforms</p>
+                <div class="social-icons">
+                    <a href="http://127.0.0.1:8000/auth/login/google-oauth2/" title="Google Login"> <i class='bx bxl-google'></i></a>
+                    <a href="http://127.0.0.1:8000/auth/login/facebook/" title="Facebook Login"><i class='bx bxl-facebook'></i></a>
+                    <a href="http://127.0.0.1:8000/auth/login/github/" title="GitHub Login"><i
+                            class='bx bxl-github'></i></a>
+                    <a href="http://127.0.0.1:8000/auth/login/linkedin-openidconnect/"
+                        title="LinkedIn Login">
+                            <i class='bx bxl-linkedin'></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-box register">
+            <form action="#" id="register-form">
+                <h1 data-lang-key="registerTitle">Registration</h1>
+                <div class="input-box">
+                    <input type="text" id="register-username" data-lang-placeholder="usernamePh" placeholder="Username" required>
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="input-box">
+                    <input type="email" id="register-email" data-lang-placeholder="emailPh" placeholder="Email" required>
+                    <i class='bx bxs-envelope'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="register-password" data-lang-placeholder="passwordPh" placeholder="Password" required>
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="register-confirm-password" data-lang-placeholder="confirmPasswordPh" placeholder="Confirm Password" required>
+                    <i class='bx bxs-lock'></i>
+                </div>
+                <button type="submit" class="btn" data-lang-key="registerBtnText">Register</button>
+                <p data-lang-key="registerWithSocial">or register with social platforms</p>
+                <div class="social-icons">
+                    <a href="http://127.0.0.1:8000/auth/login/google-oauth2/" title="Google Register"><i class='bx bxl-google'></i></a>
+                    <a href="http://127.0.0.1:8000/auth/login/facebook/" title="Facebook Register"><i class='bx bxl-facebook'></i></a>
+                    <a href="http://127.0.0.1:8000/auth/login/github/" title="GitHub Register"><i
+                            class='bx bxl-github'></i></a>
+                    <a href="http://127.0.0.1:8000/auth/login/linkedin-openidconnect/" title="LinkedIn Register"><i
+                            class='bx bxl-linkedin'></i></a>
+                </div>
+            </form>
+        </div>
+
+        <div class="toggle-box">
+            <div class="toggle-panel toggle-left">
+                <h1 data-lang-key="helloWelcome">Hello, Welcome!</h1>
+                <p data-lang-key="noAccount">Don't have an account?</p>
+                <button class="btn register-btn" data-lang-key="registerBtnText">Register</button>
+            </div>
+
+            <div class="toggle-panel toggle-right">
+                <h1 data-lang-key="welcomeBack">Welcome Back!</h1>
+                <p data-lang-key="hasAccount">Already have an account?</p>
+                <button class="btn login-btn" data-lang-key="loginTitle">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 CrownMob</p>
+    </footer>
+    <script src="lang.js"></script>
+    <script src="login.js"></script>
+
+</body>
+
+</html>

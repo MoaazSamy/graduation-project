@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حسابي - 👑 CrownMob Profile</title>
+    <meta name="description" content="إدارة حسابك الشخصي، الطلبات، العناوين والمزيد في HTI Store">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">
+    <a href="index.html">👑 CrownMob</a>
+  </div>
+  <button class="menu-toggle" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html"><span data-lang-key="home">الرئيسية</span></a></li>
+  </ul>
+  <div class="nav-right">
+    <label class="theme-switch">
+        <input type="checkbox" id="theme-toggle" onclick="toggleTheme()">
+        <span class="slider">
+            <i class="fas fa-sun sun-icon"></i>
+            <i class="fas fa-moon moon-icon"></i>
+        </span>
+    </label>
+    <div class="cart-icon" onclick="window.location.href='index.html'">
+      🛒
+    </div>
+    <button class="lang-btn" onclick="toggleLanguage()">EN</button>
+    <div id="user-auth-area">
+      <button class="login-btn" onclick="openLoginPage()"><span data-lang-key="login">تسجيل الدخول</span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- PROFILE PAGE -->
+<div class="profile-wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="prof-sidebar animate__animated animate__fadeInRight">
+        <div class="prof-avatar-section">
+            <div class="avatar-ring">
+                <i class="fas fa-user-astronaut"></i>
+            </div>
+            <h3 id="sidebar-name">المستخدم</h3>
+            <p id="sidebar-email">email@example.com</p>
+            <span class="member-badge" style="display:none;"><i class="fas fa-crown"></i> <span data-lang-key="specialMember">عضو مميز</span></span>
+        </div>
+
+        <ul class="prof-menu">
+            <li class="active" data-tab="account" onclick="switchTab('account', this)">
+                <i class="fas fa-id-card"></i>
+                <span><span data-lang-key="accountInfo">معلومات الحساب</span></span>
+            </li>
+            <li data-tab="orders" onclick="switchTab('orders', this)">
+                <i class="fas fa-box-open"></i>
+                <span><span data-lang-key="myOrders">طلباتي</span></span>
+                <span class="badge" id="orders-badge">0</span>
+            </li>
+            <li data-tab="addresses" onclick="switchTab('addresses', this)">
+                <i class="fas fa-map-marker-alt"></i>
+                <span><span data-lang-key="addresses">العناوين</span></span>
+            </li>
+            <li data-tab="security" onclick="switchTab('security', this)">
+                <i class="fas fa-shield-alt"></i>
+                <span><span data-lang-key="security">الأمان</span></span>
+            </li>
+            <li data-tab="stats" onclick="switchTab('stats', this)">
+                <i class="fas fa-chart-bar"></i>
+                <span><span data-lang-key="myStats">إحصائياتي</span></span>
+            </li>
+            <li class="logout-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span><span data-lang-key="logout">تسجيل الخروج</span></span>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="prof-main">
+
+        <!-- TAB: Account Info -->
+        <section id="tab-account" class="prof-tab active animate__animated animate__fadeIn">
+            <div class="tab-header">
+                <h2><i class="fas fa-user-circle"></i> <span data-lang-key="accountInfo">معلومات الحساب</span></h2>
+                <p><span data-lang-key="manageProfileDesc">إدارة بياناتك الشخصية والتعديل عليها</span></p>
+            </div>
+
+            <div class="prof-card">
+                <div class="card-header-bar">
+                    <h3><span data-lang-key="basicInfo">البيانات الأساسية</span></h3>
+                    <button class="edit-toggle-btn" id="edit-toggle" onclick="toggleEdit()">
+                        <i class="fas fa-pen"></i> <span data-lang-key="editBtn">تعديل</span>
+                    </button>
+                </div>
+
+                <div class="prof-form-grid">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> <span data-lang-key="username">اسم المستخدم</span></label>
+                        <input type="text" id="inp-username" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> <span data-lang-key="email">البريد الإلكتروني</span></label>
+                        <input type="email" id="inp-email" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-phone"></i> <span data-lang-key="phoneNumber">رقم الموبايل</span></label>
+                        <input type="tel" id="inp-phone" placeholder="لم يتم الإضافة بعد" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> <span data-lang-key="registrationDate">تاريخ التسجيل</span></label>
+                        <input type="text" id="inp-joined" disabled>
+                    </div>
+                </div>
+
+                <div class="save-area" id="save-area" style="display:none;">
+                    <button class="save-btn" onclick="saveProfile()">
+                        <i class="fas fa-check"></i> <span data-lang-key="saveChanges">حفظ التغييرات</span>
+                    </button>
+                    <button class="cancel-btn" onclick="cancelEdit()">
+                        <i class="fas fa-times"></i> إلغاء
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Stats Cards -->
+            <div class="quick-stats">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="stat-orders">0</span>
+                        <span class="stat-label"><span data-lang-key="totalOrders">إجمالي الطلبات</span></span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="stat-spent">0 ج</span>
+                        <span class="stat-label"><span data-lang-key="totalPurchases">إجمالي المشتريات</span></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: Orders -->
+        <section id="tab-orders" class="prof-tab">
+            <div class="tab-header">
+                <h2><i class="fas fa-box-open"></i> <span data-lang-key="myOrders">طلباتي</span></h2>
+                <p><span data-lang-key="orderTracking">تتبع حالة طلباتك السابقة والحالية</span></p>
+            </div>
+
+            <div class="orders-filter">
+                <button class="filter-btn active" onclick="filterOrders('all', this)"><span data-lang-key="allOrders">الكل</span></button>
+                <button class="filter-btn" onclick="filterOrders('pending', this)"><span data-lang-key="pending">قيد الانتظار</span></button>
+                <button class="filter-btn" onclick="filterOrders('processing', this)"><span data-lang-key="processing">جاري التجهيز</span></button>
+                <button class="filter-btn" onclick="filterOrders('shipped', this)"><span data-lang-key="shipped">تم الشحن</span></button>
+                <button class="filter-btn" onclick="filterOrders('delivered', this)"><span data-lang-key="delivered">تم التوصيل</span></button>
+            </div>
+
+            <div id="orders-container" class="orders-list">
+                <div class="empty-state">
+                    <i class="fas fa-box-open"></i>
+                    <h3><span data-lang-key="noOrdersYet">لا يوجد طلبات بعد</span></h3>
+                    <p><span data-lang-key="startShopping">ابدأ التسوق الآن واستمتع بأفضل العروض!</span></p>
+                    <a href="index.html" class="shop-now-btn"><span data-lang-key="shopNowArrow">تسوق الآن</span> <i class="fas fa-arrow-left"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: Addresses -->
+        <section id="tab-addresses" class="prof-tab">
+            <div class="tab-header">
+                <h2><i class="fas fa-map-marker-alt"></i> <span data-lang-key="savedAddresses">العناوين المحفوظة</span></h2>
+                <p><span data-lang-key="manageAddresses">إدارة عناوين الشحن والتوصيل</span></p>
+            </div>
+
+            <div class="addresses-grid">
+                <div class="address-card default-address">
+                    <div class="address-badge">
+                        <i class="fas fa-star"></i> <span data-lang-key="defaultAddress">العنوان الأساسي</span>
+                    </div>
+                    <div class="address-body">
+                        <h4 id="addr-name">لم يتم الإضافة</h4>
+                        <p id="addr-detail"><i class="fas fa-map-pin"></i> <span data-lang-key="noAddressYet">لم يتم إضافة عنوان بعد</span></p>
+                        <p id="addr-phone"><i class="fas fa-phone"></i> ---</p>
+                    </div>
+                    <div class="address-actions">
+                        <button onclick="editAddress()"><i class="fas fa-edit"></i> <span data-lang-key="editBtn">تعديل</span></button>
+                        <button onclick="deleteAddress()"><i class="fas fa-trash"></i> <span data-lang-key="deleteBtn">حذف</span></button>
+                    </div>
+                </div>
+
+                <div class="address-card add-new-card" onclick="addNewAddress()">
+                    <i class="fas fa-plus-circle"></i>
+                    <span><span data-lang-key="addNewAddressBtn">إضافة عنوان جديد</span></span>
+                </div>
+            </div>
+
+            <!-- Address Form Modal -->
+            <div id="address-modal" class="address-modal" style="display:none;">
+                <div class="address-modal-content">
+                    <h3><i class="fas fa-map-marker-alt"></i> <span data-lang-key="addEditAddress">إضافة / تعديل عنوان</span></h3>
+                    <div class="address-form">
+                        <input type="text" id="addr-inp-name" placeholder="الاسم الكامل">
+                        <input type="text" id="addr-inp-city" placeholder="المحافظة">
+                        <input type="text" id="addr-inp-area" placeholder="المنطقة / الحي">
+                        <input type="text" id="addr-inp-street" placeholder="الشارع ورقم المبنى">
+                        <input type="tel" id="addr-inp-phone" placeholder="رقم الموبايل">
+                        <div class="address-form-btns">
+                            <button onclick="saveAddress()" class="save-btn"><i class="fas fa-check"></i> <span data-lang-key="saveBtn">حفظ</span></button>
+                            <button onclick="closeAddressModal()" class="cancel-btn"><i class="fas fa-times"></i> إلغاء</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: Security -->
+        <section id="tab-security" class="prof-tab">
+            <div class="tab-header">
+                <h2><i class="fas fa-shield-alt"></i> <span data-lang-key="securityPrivacy">الأمان والخصوصية</span></h2>
+                <p><span data-lang-key="manageSecurity">إدارة كلمة المرور وإعدادات الأمان</span></p>
+            </div>
+
+            <div class="prof-card">
+                <div class="card-header-bar">
+                    <h3><span data-lang-key="changePassword">تغيير كلمة المرور</span></h3>
+                </div>
+
+                <div class="security-form">
+                    <div class="form-group full-width">
+                        <label><i class="fas fa-lock"></i> <span data-lang-key="currentPassword">كلمة المرور الحالية</span></label>
+                        <div class="password-wrap">
+                            <input type="password" id="inp-old-pass" placeholder="أدخل كلمة المرور الحالية">
+                            <i class="fas fa-eye toggle-pass" onclick="togglePassVisibility(this)"></i>
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label><i class="fas fa-key"></i> <span data-lang-key="newPassword">كلمة المرور الجديدة</span></label>
+                        <div class="password-wrap">
+                            <input type="password" id="inp-new-pass" placeholder="أدخل كلمة المرور الجديدة">
+                            <i class="fas fa-eye toggle-pass" onclick="togglePassVisibility(this)"></i>
+                        </div>
+                    </div>
+                    <button class="change-pass-btn" onclick="changePassword()">
+                        <i class="fas fa-sync-alt"></i> <span data-lang-key="updatePassword">تحديث كلمة المرور</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="prof-card" style="margin-top: 25px;">
+                <div class="card-header-bar">
+                    <h3><span data-lang-key="sessionInfo">معلومات الجلسة</span></h3>
+                </div>
+                <div class="session-info">
+                    <div class="session-item">
+                        <i class="fas fa-desktop"></i>
+                        <div>
+                            <strong><span data-lang-key="currentDevice">الجهاز الحالي</span></strong>
+                            <p id="device-info">---</p>
+                        </div>
+                    </div>
+                    <div class="session-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <strong><span data-lang-key="lastLogin">آخر تسجيل دخول</span></strong>
+                            <p id="last-login">---</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: Stats -->
+        <section id="tab-stats" class="prof-tab">
+            <div class="tab-header">
+                <h2><i class="fas fa-chart-bar"></i> <span data-lang-key="myStats">إحصائياتي</span></h2>
+                <p><span data-lang-key="overviewStats">نظرة شاملة على نشاطك في المتجر</span></p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="big-stat-card">
+                    <div class="big-stat-icon purple">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="big-stat-body">
+                        <span class="big-stat-num" id="bstat-orders">0</span>
+                        <span class="big-stat-text"><span data-lang-key="completedOrder">طلب تم تنفيذه</span></span>
+                    </div>
+                </div>
+                <div class="big-stat-card">
+                    <div class="big-stat-icon blue">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="big-stat-body">
+                        <span class="big-stat-num" id="bstat-spent">0 ج.م</span>
+                        <span class="big-stat-text"><span data-lang-key="totalSpent">إجمالي الإنفاق</span></span>
+                    </div>
+                </div>
+                <div class="big-stat-card">
+                    <div class="big-stat-icon green">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <div class="big-stat-body">
+                        <span class="big-stat-num" id="bstat-delivered">0</span>
+                        <span class="big-stat-text"><span data-lang-key="delivered">تم التوصيل</span></span>
+                    </div>
+                </div>
+                <div class="big-stat-card">
+                    <div class="big-stat-icon orange">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div class="big-stat-body">
+                        <span class="big-stat-num" id="bstat-pending">0</span>
+                        <span class="big-stat-text"><span data-lang-key="pending">قيد الانتظار</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prof-card" style="margin-top: 25px;">
+                <div class="card-header-bar">
+                    <h3><span data-lang-key="recentOrdersTitle">آخر الطلبات</span></h3>
+                </div>
+                <div id="recent-orders-table" class="recent-orders">
+                    <p class="no-data"><span data-lang-key="noDataYet">لا توجد بيانات حتى الآن</span></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 CrownMob</p>
+</footer>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<script src="lang.js"></script>
+<script src="profile.js"></script>
+<script src="notifications.js"></script>
+</body>
+</html>
