@@ -2,7 +2,6 @@
 //  🔍 LIVE SEARCH DROPDOWN SYSTEM
 //  Shared across all pages
 // ===========================================
-const API_BASE = 'https://web-production-2a731.up.railway.app/api';
 
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search-input');

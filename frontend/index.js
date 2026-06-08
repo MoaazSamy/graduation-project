@@ -5,7 +5,6 @@ const cartCount = document.getElementById("cart-count");
 const cartTotal = document.getElementById("cart-total");
 
 // ================= API =================
-const API_BASE = "https://web-production-2a731.up.railway.app";
 const PRODUCTS_API = `${API_BASE}/api/products/`;
 
 let productsData = []; // هنا هنخزن المنتجات من الباك

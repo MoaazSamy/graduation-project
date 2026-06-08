@@ -1,4 +1,3 @@
-const API_BASE = 'https://web-production-2a731.up.railway.app/api';
 
 let currentLang = API_BASE.getItem('lang') || "ar";
 

@@ -2,7 +2,6 @@
 // PROFILE PAGE - MAIN JAVASCRIPT
 // ===========================================
 
-const API_BASE = "https://web-production-2a731.up.railway.app";
 let allOrders = [];
 
 // ================= MOBILE MENU =================

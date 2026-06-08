@@ -1,7 +1,6 @@
 // =========================================
 // حالة التطبيق (السلة واللغة)
 // (Translations and currentLang are now handled by lang.js)
-const API_BASE = 'https://web-production-2a731.up.railway.app/api';
 
 let cart = [];
 

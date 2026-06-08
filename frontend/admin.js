@@ -2,7 +2,6 @@
 //   ADMIN PANEL - JAVASCRIPT
 // =========================
 
-const API_BASE = 'https://web-production-2a731.up.railway.app/api';
 let allProducts = [];
 let allCategories = [];
 let allAdminOrders = [];

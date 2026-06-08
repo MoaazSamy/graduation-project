@@ -1,4 +1,3 @@
-const API_BASE = 'https://web-production-2a731.up.railway.app/api';
 
 // ================= SOCIAL AUTH CALLBACK =================
 // لما الباك إند يرجع المستخدم بعد تسجيل الدخول بـ GitHub أو LinkedIn

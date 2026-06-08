@@ -2,7 +2,6 @@
 //  🔔 NOTIFICATION SYSTEM
 //  Shared across all pages
 // ===========================================
-const API_BASE = 'https://web-production-2a731.up.railway.app/api';
 
 (function () {
     const NOTIF_API = 'https://web-production-2a731.up.railway.app/api/notifications/';
