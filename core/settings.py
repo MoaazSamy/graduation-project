@@ -32,8 +32,8 @@ DEBUG = os.getenv("DEBUG") == "True"
 #DEBUG = True
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
+    "API_BASE",
+    "API_BASE",
     ".railway.app"
 ]
 
@@ -156,6 +156,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+CORS_ALLOWED_ORIGINS = [
+    "https://web-production-2a731.up.railway.app"
+]
 CORS_ALLOW_ALL_ORIGINS = True
 
 import os
@@ -206,7 +209,7 @@ SOCIAL_AUTH_PIPELINE = (
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 LOGIN_REDIRECT_URL = '/api/users/social/complete/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/api/users/social/complete/'
-SOCIAL_AUTH_GITHUB_REDIRECT_URI = 'http://127.0.0.1:8000/auth/complete/github/'
+SOCIAL_AUTH_GITHUB_REDIRECT_URI = 'https://web-production-2a731.up.railway.app/auth/complete/github/'
 SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_REDIRECT_URI = (
-    'http://127.0.0.1:8000/auth/complete/linkedin-openidconnect/'
+    'https://web-production-2a731.up.railway.app/auth/complete/linkedin-openidconnect/'
 )

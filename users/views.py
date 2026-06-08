@@ -63,7 +63,7 @@ def social_auth_complete(request):
             }
             frontend_url = os.environ.get(
                 'FRONTEND_URL',
-                'http://127.0.0.1:5500/frontend/login.html'
+                'https://web-production-2a731.up.railway.app/frontend/login.html'
             )
             # بنبعت التوكنز + بيانات المستخدم في الـ URL
             from urllib.parse import urlencode

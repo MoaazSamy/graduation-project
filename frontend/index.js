@@ -5,7 +5,7 @@ const cartCount = document.getElementById("cart-count");
 const cartTotal = document.getElementById("cart-total");
 
 // ================= API =================
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "https://web-production-2a731.up.railway.app";
 const PRODUCTS_API = `${API_BASE}/api/products/`;
 
 let productsData = []; // هنا هنخزن المنتجات من الباك
@@ -35,7 +35,7 @@ async function addToCart(id) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("access")
+        "Authorization": "Bearer " + API_BASE.getItem("access")
       },
       body: JSON.stringify({
         product: id,
@@ -84,7 +84,7 @@ function renderCart() {
         <img src="${item.image
         ? (item.image.startsWith('http')
           ? item.image
-          : 'http://127.0.0.1:8000' + item.image)
+          : 'https://web-production-2a731.up.railway.app' + item.image)
         : 'https://via.placeholder.com/50'
       }" style="width:50px;height:50px;object-fit:cover;border-radius:6px;">
 
@@ -129,7 +129,7 @@ async function loadCart() {
   try {
     const res = await fetch(`${API_BASE}/api/cart/`, {
       headers: {
-        "Authorization": "Bearer " + localStorage.getItem("access")
+        "Authorization": "Bearer " + API_BASE.getItem("access")
       }
     });
 
@@ -162,7 +162,7 @@ async function increaseQty(index) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer " + localStorage.getItem("access")
+      "Authorization": "Bearer " + API_BASE.getItem("access")
     },
     body: JSON.stringify({
       product: item.productId,
@@ -182,7 +182,7 @@ async function decreaseQty(index) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("access")
+        "Authorization": "Bearer " + API_BASE.getItem("access")
       },
       body: JSON.stringify({
         product: item.productId,
@@ -194,7 +194,7 @@ async function decreaseQty(index) {
     await fetch(`${API_BASE}/api/cart/delete/${item.id}/`, {
       method: "DELETE",
       headers: {
-        "Authorization": "Bearer " + localStorage.getItem("access")
+        "Authorization": "Bearer " + API_BASE.getItem("access")
       }
     });
   }
@@ -208,7 +208,7 @@ async function removeItem(index) {
   await fetch(`${API_BASE}/api/cart/delete/${item.id}/`, {
     method: "DELETE",
     headers: {
-      "Authorization": "Bearer " + localStorage.getItem("access")
+      "Authorization": "Bearer " + API_BASE.getItem("access")
     }
   });
 
@@ -435,14 +435,14 @@ window.applyCoupon = async function () {
   const code = codeInput.value.trim();
   if(!code) return;
 
-  const token = localStorage.getItem("access");
+  const token = API_BASE.getItem("access");
   if (!token) {
     showToast("يجب تسجيل الدخول أولاً", "error");
     return;
   }
 
   try {
-    const res = await fetch("http://127.0.0.1:8000/api/orders/apply-coupon/", {
+    const res = await fetch("https://web-production-2a731.up.railway.app/api/orders/apply-coupon/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -488,7 +488,7 @@ window.submitOrder = async function () {
     return;
   }
 
-  const token = localStorage.getItem("access");
+  const token = API_BASE.getItem("access");
 
   if (!token) {
     alert("يجب تسجيل الدخول أولاً");
@@ -496,7 +496,7 @@ window.submitOrder = async function () {
   }
 
   try {
-    const res = await fetch("http://127.0.0.1:8000/api/orders/checkout/", {
+    const res = await fetch("https://web-production-2a731.up.railway.app/api/orders/checkout/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -618,7 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function checkUserAuth() {
   const authArea = document.getElementById('user-auth-area');
-  const user = JSON.parse(localStorage.getItem('currentUser'));
+  const user = JSON.parse(API_BASE.getItem('currentUser'));
 
   if (!authArea) return;
 
@@ -653,9 +653,9 @@ function checkUserAuth() {
 
 // دالة تسجيل الخروج
 function logout() {
-  localStorage.removeItem('currentUser');
-  localStorage.removeItem('access');
-  localStorage.removeItem('refresh');
+  API_BASE.removeItem('currentUser');
+  API_BASE.removeItem('access');
+  API_BASE.removeItem('refresh');
   window.location.href = 'index.html';
 }
 
@@ -665,7 +665,7 @@ function logout() {
 
 // عند تحميل الصفحة، نتحقق من الوضع المحفوظ
 document.addEventListener('DOMContentLoaded', () => {
-  const savedTheme = localStorage.getItem('theme');
+  const savedTheme = API_BASE.getItem('theme');
   const toggleBtn = document.getElementById('theme-toggle');
 
   if (savedTheme === 'dark') {
@@ -682,9 +682,9 @@ function toggleTheme() {
 
   // حفظ الاختيار في المتصفح
   if (body.classList.contains('dark-mode')) {
-    localStorage.setItem('theme', 'dark');
+    API_BASE.setItem('theme', 'dark');
   } else {
-    localStorage.setItem('theme', 'light');
+    API_BASE.setItem('theme', 'light');
   }
 }
 
@@ -895,7 +895,7 @@ function renderProductsFromAPI() {
             <img src="${product.image
         ? (product.image.startsWith('http')
           ? product.image
-          : 'http://127.0.0.1:8000' + product.image)
+          : 'https://web-production-2a731.up.railway.app' + product.image)
         : 'https://via.placeholder.com/300'
       }">
             <h3>${product.name}</h3>
@@ -988,7 +988,7 @@ function showToast(message, color = "#1f1d1da5") {
 // PRODUCT COMPARISON SYSTEM
 // =========================================
 
-let compareList = JSON.parse(localStorage.getItem('compareList') || '[]');
+let compareList = JSON.parse(API_BASE.getItem('compareList') || '[]');
 const MAX_COMPARE = 4;
 
 function isInCompareList(productId) {
@@ -1012,14 +1012,14 @@ function toggleCompare(productId) {
     showToast(translations[currentLang].addToCompare || 'تم الإضافة للمقارنة ⚖️');
   }
 
-  localStorage.setItem('compareList', JSON.stringify(compareList));
+  API_BASE.setItem('compareList', JSON.stringify(compareList));
   updateCompareUI();
 }
 
 function removeFromCompare(productId) {
   productId = Number(productId);
   compareList = compareList.filter(id => id !== productId);
-  localStorage.setItem('compareList', JSON.stringify(compareList));
+  API_BASE.setItem('compareList', JSON.stringify(compareList));
   updateCompareUI();
 
   // If modal is open, re-render it
@@ -1035,7 +1035,7 @@ function removeFromCompare(productId) {
 
 function clearCompare() {
   compareList = [];
-  localStorage.setItem('compareList', JSON.stringify(compareList));
+  API_BASE.setItem('compareList', JSON.stringify(compareList));
   updateCompareUI();
 }
 
@@ -1081,7 +1081,7 @@ function renderCompareBar() {
     if (!product) return;
 
     const imgUrl = product.image
-      ? (product.image.startsWith('http') ? product.image : 'http://127.0.0.1:8000' + product.image)
+      ? (product.image.startsWith('http') ? product.image : 'https://web-production-2a731.up.railway.app' + product.image)
       : 'https://via.placeholder.com/55';
 
     itemsContainer.innerHTML += `
@@ -1181,7 +1181,7 @@ async function renderCompareModal() {
   tableHTML += `<thead><tr><th></th>`;
   products.forEach(p => {
     const imgUrl = p.image
-      ? (p.image.startsWith('http') ? p.image : 'http://127.0.0.1:8000' + p.image)
+      ? (p.image.startsWith('http') ? p.image : 'https://web-production-2a731.up.railway.app' + p.image)
       : 'https://via.placeholder.com/120';
     tableHTML += `
       <th class="product-col">
@@ -1236,7 +1236,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // WISHLIST SYSTEM
 // =========================================
 
-let wishlistIds = JSON.parse(localStorage.getItem('wishlistIds') || '[]');
+let wishlistIds = JSON.parse(API_BASE.getItem('wishlistIds') || '[]');
 
 function isInWishlist(productId) {
   return wishlistIds.includes(Number(productId));
@@ -1244,7 +1244,7 @@ function isInWishlist(productId) {
 
 async function toggleWishlist(productId) {
   productId = Number(productId);
-  const token = localStorage.getItem('access');
+  const token = API_BASE.getItem('access');
   const t = translations[currentLang];
 
   if (!token) {
@@ -1292,7 +1292,7 @@ async function toggleWishlist(productId) {
       wishlistIds.push(productId);
     }
   }
-  localStorage.setItem('wishlistIds', JSON.stringify(wishlistIds));
+  API_BASE.setItem('wishlistIds', JSON.stringify(wishlistIds));
   updateWishlistUI();
 
   // Open Wishlist Panel if it was just added
@@ -1305,7 +1305,7 @@ async function toggleWishlist(productId) {
 
 async function removeFromWishlistAPI(productId) {
   productId = Number(productId);
-  const token = localStorage.getItem('access');
+  const token = API_BASE.getItem('access');
 
   if (token) {
     try {
@@ -1323,14 +1323,14 @@ async function removeFromWishlistAPI(productId) {
   }
 
   wishlistIds = wishlistIds.filter(id => id !== productId);
-  localStorage.setItem('wishlistIds', JSON.stringify(wishlistIds));
+  API_BASE.setItem('wishlistIds', JSON.stringify(wishlistIds));
   updateWishlistUI();
   renderWishlistPanel();
   showToast(translations[currentLang].removeFromWishlist || 'تم الإزالة من المفضلة', '#ff4757');
 }
 
 async function loadWishlist() {
-  const token = localStorage.getItem('access');
+  const token = API_BASE.getItem('access');
   if (!token) return;
 
   try {
@@ -1340,7 +1340,7 @@ async function loadWishlist() {
     if (res.ok) {
       const data = await res.json();
       wishlistIds = data.map(item => item.product);
-      localStorage.setItem('wishlistIds', JSON.stringify(wishlistIds));
+      API_BASE.setItem('wishlistIds', JSON.stringify(wishlistIds));
       updateWishlistUI();
     }
   } catch (err) {
@@ -1409,7 +1409,7 @@ function renderWishlistPanel() {
     if (!product) return;
 
     const imgUrl = product.image
-      ? (product.image.startsWith('http') ? product.image : 'http://127.0.0.1:8000' + product.image)
+      ? (product.image.startsWith('http') ? product.image : 'https://web-production-2a731.up.railway.app' + product.image)
       : 'https://via.placeholder.com/70';
 
     html += `

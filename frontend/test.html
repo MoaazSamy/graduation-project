@@ -6,13 +6,13 @@
 
   <script>
     function testAPI() {
-      fetch("http://127.0.0.1:8000/api/health/")
+      fetch("https://web-production-2a731.up.railway.app/api/health/")
         .then(res => res.json())
         .then(data => alert(JSON.stringify(data)))
         .catch(err => console.error(err));
     }
      function testLogin() {
-      window.location.href = "http://127.0.0.1:8000/admin/";
+      window.location.href = "https://web-production-2a731.up.railway.app/admin/";
 
     }
   </script>

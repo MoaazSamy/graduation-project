@@ -2,9 +2,10 @@
 //  🔔 NOTIFICATION SYSTEM
 //  Shared across all pages
 // ===========================================
+const API_BASE = 'https://web-production-2a731.up.railway.app/api';
 
 (function () {
-    const NOTIF_API = 'http://127.0.0.1:8000/api/notifications/';
+    const NOTIF_API = 'https://web-production-2a731.up.railway.app/api/notifications/';
     const POLL_INTERVAL = 30000; // 30 seconds
     let notificationsData = [];
     let unreadCount = 0;
@@ -12,7 +13,7 @@
 
     // ---- Wait for DOM ----
     document.addEventListener('DOMContentLoaded', () => {
-        const token = localStorage.getItem('access');
+        const token = API_BASE.getItem('access');
         if (!token) return; // مش مسجل دخول
 
         injectNotificationUI();
@@ -60,7 +61,7 @@
 
     // ---- FETCH UNREAD COUNT ----
     async function fetchUnreadCount() {
-        const token = localStorage.getItem('access');
+        const token = API_BASE.getItem('access');
         if (!token) return;
 
         try {
@@ -85,7 +86,7 @@
 
     // ---- FETCH ALL NOTIFICATIONS ----
     async function fetchNotifications() {
-        const token = localStorage.getItem('access');
+        const token = API_BASE.getItem('access');
         if (!token) return;
 
         const body = document.getElementById('notif-panel-body');
@@ -172,7 +173,7 @@
 
     // ---- MARK READ ----
     async function markRead(id, el) {
-        const token = localStorage.getItem('access');
+        const token = API_BASE.getItem('access');
         if (!token) return;
 
         try {
@@ -194,7 +195,7 @@
 
     // ---- MARK ALL READ ----
     async function markAllRead() {
-        const token = localStorage.getItem('access');
+        const token = API_BASE.getItem('access');
         if (!token) return;
 
         try {

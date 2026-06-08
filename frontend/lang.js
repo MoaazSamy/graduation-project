@@ -1,4 +1,6 @@
-let currentLang = localStorage.getItem('lang') || "ar";
+const API_BASE = 'https://web-production-2a731.up.railway.app/api';
+
+let currentLang = API_BASE.getItem('lang') || "ar";
 
 const translations = {
   ar: {
@@ -413,7 +415,7 @@ function applyLanguage() {
 
 function toggleLanguage() {
   currentLang = currentLang === "ar" ? "en" : "ar";
-  localStorage.setItem('lang', currentLang);
+  API_BASE.setItem('lang', currentLang);
   applyLanguage();
 }
 

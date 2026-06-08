@@ -1,3 +1,5 @@
+const API_BASE = 'https://web-production-2a731.up.railway.app/api';
+
 // ================= SOCIAL AUTH CALLBACK =================
 // لما الباك إند يرجع المستخدم بعد تسجيل الدخول بـ GitHub أو LinkedIn
 // بيحط التوكنز وبيانات المستخدم في الـ URL كـ query params
@@ -7,9 +9,9 @@
     const refresh = params.get('refresh');
 
     if (access && refresh) {
-        // ✅ حفظ التوكنز في localStorage
-        localStorage.setItem('access', access);
-        localStorage.setItem('refresh', refresh);
+        // ✅ حفظ التوكنز في API_BASE
+        API_BASE.setItem('access', access);
+        API_BASE.setItem('refresh', refresh);
 
         // ✅ نجيب بيانات المستخدم من الـ URL params أو من الـ API
         const userId = params.get('user_id');
@@ -19,7 +21,7 @@
 
         if (userId && userName) {
             // البيانات موجودة في الـ URL — نحفظها مباشرة
-            localStorage.setItem('currentUser', JSON.stringify({
+            API_BASE.setItem('currentUser', JSON.stringify({
                 id: parseInt(userId),
                 name: userName,
                 email: userEmail || '',
@@ -29,7 +31,7 @@
         } else {
             // لو مش موجودة — نجيبها من الـ API
             try {
-                const res = await fetch('http://127.0.0.1:8000/api/users/profile/', {
+                const res = await fetch('https://web-production-2a731.up.railway.app/api/users/profile/', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${access}`,
@@ -38,7 +40,7 @@
                 });
                 if (res.ok) {
                     const userData = await res.json();
-                    localStorage.setItem('currentUser', JSON.stringify({
+                    API_BASE.setItem('currentUser', JSON.stringify({
                         id: userData.id,
                         name: userData.username,
                         email: userData.email,
@@ -89,7 +91,7 @@ document.getElementById("login-form").addEventListener("submit", async function(
 
     try {
         // نبعت request للباك إند (Django API)
-        const res = await fetch("http://127.0.0.1:8000/api/users/login/", {
+        const res = await fetch("https://web-production-2a731.up.railway.app/api/users/login/", {
             method: "POST", // نوع الطلب
             headers: {
                 "Content-Type": "application/json"
@@ -109,12 +111,12 @@ document.getElementById("login-form").addEventListener("submit", async function(
             return;
         }
 
-        // ✅ حفظ التوكن في localStorage
-        localStorage.setItem("access", data.access);
-        localStorage.setItem("refresh", data.refresh);
+        // ✅ حفظ التوكن في API_BASE
+        API_BASE.setItem("access", data.access);
+        API_BASE.setItem("refresh", data.refresh);
 
         // ✅ حفظ بيانات المستخدم
-        localStorage.setItem("currentUser", JSON.stringify({
+        API_BASE.setItem("currentUser", JSON.stringify({
             id: data.user_id,
             name: data.user_name,
             email: data.user_email,
@@ -165,7 +167,7 @@ document.getElementById("register-form").addEventListener("submit", async functi
 
     try {
         // نبعت البيانات للباك إند عشان نسجل المستخدم
-        const res = await fetch("http://127.0.0.1:8000/api/users/register/", {
+        const res = await fetch("https://web-production-2a731.up.railway.app/api/users/register/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

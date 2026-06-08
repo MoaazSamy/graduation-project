@@ -2,7 +2,7 @@
 // PROFILE PAGE - MAIN JAVASCRIPT
 // ===========================================
 
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "https://web-production-2a731.up.railway.app";
 let allOrders = [];
 
 // ================= MOBILE MENU =================
@@ -19,7 +19,7 @@ document.addEventListener('click', function(e) {
 
 // ================= AUTH CHECK =================
 document.addEventListener('DOMContentLoaded', () => {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const user = JSON.parse(API_BASE.getItem('currentUser'));
 
     if (!user) {
         window.location.href = "login.html";
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('inp-joined').value = user.joined || new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-EG' : 'en-US');
 
     // Fill address if saved
-    const addr = JSON.parse(localStorage.getItem('userAddress'));
+    const addr = JSON.parse(API_BASE.getItem('userAddress'));
     if (addr) {
         document.getElementById('addr-name').innerText = addr.name || translations[currentLang].notAddedYet || 'لم يتم الإضافة';
         document.getElementById('addr-detail').innerHTML = `<i class="fas fa-map-pin"></i> ${addr.city || ''} - ${addr.area || ''} - ${addr.street || ''}`;
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadOrders();
 
     // Theme
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = API_BASE.getItem('theme');
     const toggleBtn = document.getElementById('theme-toggle');
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ================= THEME =================
 function toggleTheme() {
     document.body.classList.toggle('dark-mode');
-    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    API_BASE.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
 }
 
 // ================= LOGIN =================
@@ -91,9 +91,9 @@ function openLoginPage() { window.location.href = "login.html"; }
 
 // ================= LOGOUT =================
 function logout() {
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('access');
-    localStorage.removeItem('refresh');
+    API_BASE.removeItem('currentUser');
+    API_BASE.removeItem('access');
+    API_BASE.removeItem('refresh');
     window.location.href = 'index.html';
 }
 
@@ -144,11 +144,11 @@ function cancelEdit() {
 }
 
 function saveProfile() {
-    const user = JSON.parse(localStorage.getItem('currentUser')) || {};
+    const user = JSON.parse(API_BASE.getItem('currentUser')) || {};
     user.name = document.getElementById('inp-username').value;
     user.email = document.getElementById('inp-email').value;
     user.phone = document.getElementById('inp-phone').value;
-    localStorage.setItem('currentUser', JSON.stringify(user));
+    API_BASE.setItem('currentUser', JSON.stringify(user));
 
     // Update sidebar
     document.getElementById('sidebar-name').innerText = user.name;
@@ -160,7 +160,7 @@ function saveProfile() {
 
 // ================= LOAD ORDERS =================
 async function loadOrders() {
-    const token = localStorage.getItem('access');
+    const token = API_BASE.getItem('access');
 
     if (!token) {
         console.log("❌ مفيش token");
@@ -305,7 +305,7 @@ function filterOrders(status, el) {
 async function cancelOrder(orderId) {
     if (!confirm((currentLang === 'ar' ? 'هل أنت متأكد من إلغاء هذا الطلب؟' : 'Are you sure you want to cancel this order?'))) return;
     
-    const token = localStorage.getItem('access');
+    const token = API_BASE.getItem('access');
     if (!token) return;
 
     try {
@@ -375,7 +375,7 @@ function addNewAddress() { document.getElementById('address-modal').style.displa
 function closeAddressModal() { document.getElementById('address-modal').style.display = 'none'; }
 
 function editAddress() {
-    const addr = JSON.parse(localStorage.getItem('userAddress')) || {};
+    const addr = JSON.parse(API_BASE.getItem('userAddress')) || {};
     document.getElementById('addr-inp-name').value = addr.name || '';
     document.getElementById('addr-inp-city').value = addr.city || '';
     document.getElementById('addr-inp-area').value = addr.area || '';
@@ -392,7 +392,7 @@ function saveAddress() {
         street: document.getElementById('addr-inp-street').value,
         phone: document.getElementById('addr-inp-phone').value
     };
-    localStorage.setItem('userAddress', JSON.stringify(addr));
+    API_BASE.setItem('userAddress', JSON.stringify(addr));
 
     document.getElementById('addr-name').innerText = addr.name || translations[currentLang].notAddedYet || 'لم يتم الإضافة';
     document.getElementById('addr-detail').innerHTML = `<i class="fas fa-map-pin"></i> ${addr.city} - ${addr.area} - ${addr.street}`;
@@ -403,7 +403,7 @@ function saveAddress() {
 }
 
 function deleteAddress() {
-    localStorage.removeItem('userAddress');
+    API_BASE.removeItem('userAddress');
     document.getElementById('addr-name').innerText = translations[currentLang].notAddedYet || 'لم يتم الإضافة';
     document.getElementById('addr-detail').innerHTML = '<i class="fas fa-map-pin"></i> لم يتم إضافة عنوان بعد';
     document.getElementById('addr-phone').innerHTML = '<i class="fas fa-phone"></i> ---';
@@ -440,7 +440,7 @@ async function changePassword() {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer " + localStorage.getItem("access")
+                "Authorization": "Bearer " + API_BASE.getItem("access")
             },
             body: JSON.stringify({ old_password: oldPass, new_password: newPass })
         });
