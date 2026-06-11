@@ -37,9 +37,12 @@ class UserLoginSerializer(serializers.Serializer):
         print("USERNAME:", username)
         print("PASSWORD:", password)
 
-        user = authenticate(username=username, password=password)
-
-        print("USER =", user)
+        try:
+            user = authenticate(username=username, password=password)
+            print("USER =", user)
+        except Exception as e:
+            print("AUTH ERROR =", str(e))
+            raise
 
         if user:
             print("USER ID =", user.id)
