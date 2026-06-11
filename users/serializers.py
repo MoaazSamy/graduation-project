@@ -31,6 +31,8 @@ class UserLoginSerializer(serializers.Serializer):
     is_premium = serializers.BooleanField(read_only=True)
 
     def validate(self, data):
+        print("===== NEW VERSION =====")
+        
         username = data.get('username')
         password = data.get('password')
 
