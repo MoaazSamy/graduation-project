@@ -5,7 +5,7 @@ const cartCount = document.getElementById("cart-count");
 const cartTotal = document.getElementById("cart-total");
 
 // ================= API =================
-const PRODUCTS_API = `${API_BASE}/api/products/`;
+const PRODUCTS_API = `${API_BASE}/products/`;
 
 let productsData = []; // هنا هنخزن المنتجات من الباك
 
@@ -280,7 +280,7 @@ function applyFilters() {
 // ================= LOAD CATEGORIES FROM API =================
 async function loadCategoriesForFilter(activeBrand = null) {
   try {
-    const res = await fetch(`${API_BASE}/api/products/categories/`);
+    const res = await fetch(`${API_BASE}/products/categories/`);
     const data = await res.json();
     categoriesData = data;
 
@@ -1141,7 +1141,7 @@ async function renderCompareModal() {
     } else {
       // Fetch from API to get specs
       try {
-        const res = await fetch(`${API_BASE}/api/products/${id}/`);
+        const res = await fetch(`${API_BASE}/products/${id}/`);
         const data = await res.json();
         products.push(data);
       } catch (err) {

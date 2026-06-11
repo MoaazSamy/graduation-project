@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         debounceTimer = setTimeout(async () => {
             try {
                 // Fetch filtered products directly from the updated backend API
-                const res = await fetch(`${API_URL}/api/products/?search=${encodeURIComponent(query)}`);
+                const res = await fetch(`${API_URL}/products/?search=${encodeURIComponent(query)}`);
                 if (!res.ok) throw new Error('API Error');
                 
                 const data = await res.json();

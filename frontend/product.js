@@ -257,7 +257,7 @@ async function renderRelatedProducts(currentProduct) {
     const grid = document.getElementById('related-grid');
 
     try {
-        const res = await fetch(`${API_BASE}/api/products/`);
+        const res = await fetch(`${API_BASE}/products/`);
         const data = await res.json();
 
         console.log("RELATED FROM API:", data);
@@ -808,7 +808,7 @@ async function loadProduct(id) {
     const container = document.getElementById('product-container');
 
     try {
-        const res = await fetch(`${API_BASE}/api/products/${id}/`);
+        const res = await fetch(`${API_BASE}/products/${id}/`);
         const data = await res.json();
 
         console.log("DATA FROM API:", data);
@@ -1045,7 +1045,7 @@ async function renderWishlistPanel() {
     let html = '';
     for (const productId of wishlistIds) {
         try {
-            const res = await fetch(`${API_BASE}/api/products/${productId}/`);
+            const res = await fetch(`${API_BASE}/products/${productId}/`);
             const p = await res.json();
             const imgUrl = p.image ? (p.image.startsWith('http') ? p.image : API_BASE + p.image) : 'https://via.placeholder.com/70';
             html += `
