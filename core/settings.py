@@ -157,7 +157,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 CORS_ALLOWED_ORIGINS = [
-    "https://graduation-project-coral-alpha.vercel.app/"
+    "https://graduation-project-coral-alpha.vercel.app"
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 
