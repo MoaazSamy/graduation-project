@@ -39,10 +39,15 @@ class UserLoginSerializer(serializers.Serializer):
 
         user = authenticate(username=username, password=password)
 
-        print("USER:", user)  # 👈 مهم جدًا
+        print("USER =", user)
+
+        if user:
+            print("USER ID =", user.id)
 
         if not user:
-            raise serializers.ValidationError("اسم المستخدم أو كلمة المرور غير صحيحة")
+            raise serializers.ValidationError(
+                "اسم المستخدم أو كلمة المرور غير صحيحة"
+            )
 
         refresh = RefreshToken.for_user(user)
         data['access'] = str(refresh.access_token)
