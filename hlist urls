@@ -1,0 +1,219 @@
+[1mdiff --git a/frontend/index.js b/frontend/index.js[m
+[1mindex 660a1b9..1eacf13 100644[m
+[1m--- a/frontend/index.js[m
+[1m+++ b/frontend/index.js[m
+[36m@@ -30,7 +30,7 @@[m [mdocument.addEventListener('click', function (e) {[m
+ [m
+ async function addToCart(id) {[m
+   try {[m
+[31m-    const res = await fetch(`${API_BASE}/api/cart/add/`, {[m
+[32m+[m[32m    const res = await fetch(`${API_BASE}/cart/add/`, {[m
+       method: "POST",[m
+       headers: {[m
+         "Content-Type": "application/json",[m
+[36m@@ -126,7 +126,7 @@[m [mfunction renderCart() {[m
+ [m
+ async function loadCart() {[m
+   try {[m
+[31m-    const res = await fetch(`${API_BASE}/api/cart/`, {[m
+[32m+[m[32m    const res = await fetch(`${API_BASE}/cart/`, {[m
+       headers: {[m
+         "Authorization": "Bearer " + localStorage.getItem("access")[m
+       }[m
+[36m@@ -157,7 +157,7 @@[m [masync function loadCart() {[m
+ async function increaseQty(index) {[m
+   const item = cart[index];[m
+ [m
+[31m-  await fetch(`${API_BASE}/api/cart/add/`, {[m
+[32m+[m[32m  await fetch(`${API_BASE}/cart/add/`, {[m
+     method: "POST",[m
+     headers: {[m
+       "Content-Type": "application/json",[m
+[36m@@ -177,7 +177,7 @@[m [masync function decreaseQty(index) {[m
+ [m
+   if (item.qty > 1) {[m
+     // نقلل الكمية[m
+[31m-    await fetch(`${API_BASE}/api/cart/add/`, {[m
+[32m+[m[32m    await fetch(`${API_BASE}/cart/add/`, {[m
+       method: "POST",[m
+       headers: {[m
+         "Content-Type": "application/json",[m
+[36m@@ -190,7 +190,7 @@[m [masync function decreaseQty(index) {[m
+     });[m
+   } else {[m
+     // لو 1 → نحذف[m
+[31m-    await fetch(`${API_BASE}/api/cart/delete/${item.id}/`, {[m
+[32m+[m[32m    await fetch(`${API_BASE}/cart/delete/${item.id}/`, {[m
+       method: "DELETE",[m
+       headers: {[m
+         "Authorization": "Bearer " + localStorage.getItem("access")[m
+[36m@@ -204,7 +204,7 @@[m [masync function decreaseQty(index) {[m
+ async function removeItem(index) {[m
+   const item = cart[index];[m
+ [m
+[31m-  await fetch(`${API_BASE}/api/cart/delete/${item.id}/`, {[m
+[32m+[m[32m  await fetch(`${API_BASE}/cart/delete/${item.id}/`, {[m
+     method: "DELETE",[m
+     headers: {[m
+       "Authorization": "Bearer " + localStorage.getItem("access")[m
+[36m@@ -1254,7 +1254,7 @@[m [masync function toggleWishlist(productId) {[m
+   if (isInWishlist(productId)) {[m
+     // Remove from wishlist[m
+     try {[m
+[31m-      await fetch(`${API_BASE}/api/wishlist/remove/`, {[m
+[32m+[m[32m      await fetch(`${API_BASE}/wishlist/remove/`, {[m
+         method: 'DELETE',[m
+         headers: {[m
+           'Content-Type': 'application/json',[m
+[36m@@ -1270,7 +1270,7 @@[m [masync function toggleWishlist(productId) {[m
+   } else {[m
+     // Add to wishlist[m
+     try {[m
+[31m-      const res = await fetch(`${API_BASE}/api/wishlist/add/`, {[m
+[32m+[m[32m      const res = await fetch(`${API_BASE}/wishlist/add/`, {[m
+         method: 'POST',[m
+         headers: {[m
+           'Content-Type': 'application/json',[m
+[36m@@ -1308,7 +1308,7 @@[m [masync function removeFromWishlistAPI(productId) {[m
+ [m
+   if (token) {[m
+     try {[m
+[31m-      await fetch(`${API_BASE}/api/wishlist/remove/`, {[m
+[32m+[m[32m      await fetch(`${API_BASE}/wishlist/remove/`, {[m
+         method: 'DELETE',[m
+         headers: {[m
+           'Content-Type': 'application/json',[m
+[36m@@ -1333,7 +1333,7 @@[m [masync function loadWishlist() {[m
+   if (!token) return;[m
+ [m
+   try {[m
+[31m-    const res = await fetch(`${API_BASE}/api/wishlist/`, {[m
+[32m+[m[32m    const res = await fetch(`${API_BASE}/wishlist/`, {[m
+       headers: { 'Authorization': `Bearer ${token}` }[m
+     });[m
+     if (res.ok) {[m
+[1mdiff --git a/frontend/product.js b/frontend/product.js[m
+[1mindex fc8f3d6..a72cf1f 100644[m
+[1m--- a/frontend/product.js[m
+[1m+++ b/frontend/product.js[m
+[36m@@ -326,7 +326,7 @@[m [masync function renderRelatedProducts(currentProduct) {[m
+ // =========================================[m
+ async function addToCart(productId) {[m
+     try {[m
+[31m-        const res = await fetch(`${API_BASE}/api/cart/add/`, {[m
+[32m+[m[32m        const res = await fetch(`${API_BASE}/cart/add/`, {[m
+             method: "POST",[m
+             headers: {[m
+                 "Content-Type": "application/json",[m
+[36m@@ -376,7 +376,7 @@[m [masync function loadCart() {[m
+     }[m
+ [m
+     try {[m
+[31m-        const res = await fetch(`${API_BASE}/api/cart/`, {[m
+[32m+[m[32m        const res = await fetch(`${API_BASE}/cart/`, {[m
+             headers: {[m
+                 "Authorization": "Bearer " + token[m
+             }[m
+[36m@@ -410,7 +410,7 @@[m [masync function loadCart() {[m
+ async function increaseQty(index) {[m
+     const item = cart[index];[m
+ [m
+[31m-    await fetch(`${API_BASE}/api/cart/add/`, {[m
+[32m+[m[32m    await fetch(`${API_BASE}/cart/add/`, {[m
+         method: "POST",[m
+         headers: {[m
+             "Content-Type": "application/json",[m
+[36m@@ -430,7 +430,7 @@[m [masync function decreaseQty(index) {[m
+ [m
+     if (item.qty > 1) {[m
+         // نقلل الكمية[m
+[31m-        await fetch(`${API_BASE}/api/cart/add/`, {[m
+[32m+[m[32m        await fetch(`${API_BASE}/cart/add/`, {[m
+             method: "POST",[m
+             headers: {[m
+                 "Content-Type": "application/json",[m
+[36m@@ -443,7 +443,7 @@[m [masync function decreaseQty(index) {[m
+         });[m
+     } else {[m
+         // لو 1 → نحذف[m
+[31m-        await fetch(`${API_BASE}/api/cart/delete/${item.id}/`, {[m
+[32m+[m[32m        await fetch(`${API_BASE}/cart/delete/${item.id}/`, {[m
+             method: "DELETE",[m
+             headers: {[m
+                 "Authorization": "Bearer " + localStorage.getItem("access")[m
+[36m@@ -456,7 +456,7 @@[m [masync function decreaseQty(index) {[m
+ [m
+ async function removeFromCart(itemId) {[m
+     try {[m
+[31m-        await fetch(`${API_BASE}/api/cart/delete/${itemId}/`, {[m
+[32m+[m[32m        await fetch(`${API_BASE}/cart/delete/${itemId}/`, {[m
+             method: "DELETE",[m
+             headers: {[m
+                 "Authorization": "Bearer " + localStorage.getItem("access")[m
+[36m@@ -950,7 +950,7 @@[m [masync function toggleWishlist(productId, btnEl) {[m
+ [m
+     if (isInWishlist(productId)) {[m
+         try {[m
+[31m-            await fetch(`${API_BASE}/api/wishlist/remove/`, {[m
+[32m+[m[32m            await fetch(`${API_BASE}/wishlist/remove/`, {[m
+                 method: 'DELETE',[m
+                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },[m
+                 body: JSON.stringify({ product: productId })[m
+[36m@@ -965,7 +965,7 @@[m [masync function toggleWishlist(productId, btnEl) {[m
+         }[m
+     } else {[m
+         try {[m
+[31m-            await fetch(`${API_BASE}/api/wishlist/add/`, {[m
+[32m+[m[32m            await fetch(`${API_BASE}/wishlist/add/`, {[m
+                 method: 'POST',[m
+                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },[m
+                 body: JSON.stringify({ product: productId })[m
+[36m@@ -996,7 +996,7 @@[m [masync function removeFromWishlistAPI(productId) {[m
+     const token = localStorage.getItem('access');[m
+     if (token) {[m
+         try {[m
+[31m-            await fetch(`${API_BASE}/api/wishlist/remove/`, {[m
+[32m+[m[32m            await fetch(`${API_BASE}/wishlist/remove/`, {[m
+                 method: 'DELETE',[m
+                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },[m
+                 body: JSON.stringify({ product: productId })[m
+[36m@@ -1071,7 +1071,7 @@[m [masync function loadWishlistFromAPI() {[m
+     const token = localStorage.getItem('access');[m
+     if (!token) return;[m
+     try {[m
+[31m-        const res = await fetch(`${API_BASE}/api/wishlist/`, { headers: { 'Authorization': `Bearer ${token}` } });[m
+[32m+[m[32m        const res = await fetch(`${API_BASE}/wishlist/`, { headers: { 'Authorization': `Bearer ${token}` } });[m
+         if (res.ok) {[m
+             const data = await res.json();[m
+             wishlistIds = data.map(item => item.product);[m
+[1mdiff --git a/frontend/profile.js b/frontend/profile.js[m
+[1mindex 2688d40..c8fee4a 100644[m
+[1m--- a/frontend/profile.js[m
+[1m+++ b/frontend/profile.js[m
+[36m@@ -167,7 +167,7 @@[m [masync function loadOrders() {[m
+     }[m
+ [m
+     try {[m
+[31m-        const res = await fetch(`${API_BASE}/api/orders/my-orders/`, {[m
+[32m+[m[32m        const res = await fetch(`${API_BASE}/orders/my-orders/`, {[m
+             headers: { [m
+                 "Authorization": "Bearer " + token [m
+             }[m
+[36m@@ -308,7 +308,7 @@[m [masync function cancelOrder(orderId) {[m
+     if (!token) return;[m
+ [m
+     try {[m
+[31m-        const res = await fetch(`${API_BASE}/api/orders/${orderId}/cancel/`, {[m
+[32m+[m[32m        const res = await fetch(`${API_BASE}/orders/${orderId}/cancel/`, {[m
+             method: 'POST',[m
+             headers: {[m
+                 "Authorization": "Bearer " + token,[m
+[36m@@ -435,7 +435,7 @@[m [masync function changePassword() {[m
+     }[m
+ [m
+     try {[m
+[31m-        const res = await fetch(`${API_BASE}/api/users/change-password/`, {[m
+[32m+[m[32m        const res = await fetch(`${API_BASE}/users/change-password/`, {[m
+             method: "PUT",[m
+             headers: {[m
+                 "Content-Type": "application/json",[m

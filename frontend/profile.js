@@ -167,7 +167,7 @@ async function loadOrders() {
     }
 
     try {
-        const res = await fetch(`${API_BASE}/api/orders/my-orders/`, {
+        const res = await fetch(`${API_BASE}/orders/my-orders/`, {
             headers: { 
                 "Authorization": "Bearer " + token 
             }
@@ -308,7 +308,7 @@ async function cancelOrder(orderId) {
     if (!token) return;
 
     try {
-        const res = await fetch(`${API_BASE}/api/orders/${orderId}/cancel/`, {
+        const res = await fetch(`${API_BASE}/orders/${orderId}/cancel/`, {
             method: 'POST',
             headers: {
                 "Authorization": "Bearer " + token,
@@ -435,7 +435,7 @@ async function changePassword() {
     }
 
     try {
-        const res = await fetch(`${API_BASE}/api/users/change-password/`, {
+        const res = await fetch(`${API_BASE}/users/change-password/`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

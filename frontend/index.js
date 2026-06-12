@@ -30,7 +30,7 @@ document.addEventListener('click', function (e) {
 
 async function addToCart(id) {
   try {
-    const res = await fetch(`${API_BASE}/api/cart/add/`, {
+    const res = await fetch(`${API_BASE}/cart/add/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -126,7 +126,7 @@ function renderCart() {
 
 async function loadCart() {
   try {
-    const res = await fetch(`${API_BASE}/api/cart/`, {
+    const res = await fetch(`${API_BASE}/cart/`, {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("access")
       }
@@ -157,7 +157,7 @@ async function loadCart() {
 async function increaseQty(index) {
   const item = cart[index];
 
-  await fetch(`${API_BASE}/api/cart/add/`, {
+  await fetch(`${API_BASE}/cart/add/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -177,7 +177,7 @@ async function decreaseQty(index) {
 
   if (item.qty > 1) {
     // نقلل الكمية
-    await fetch(`${API_BASE}/api/cart/add/`, {
+    await fetch(`${API_BASE}/cart/add/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -190,7 +190,7 @@ async function decreaseQty(index) {
     });
   } else {
     // لو 1 → نحذف
-    await fetch(`${API_BASE}/api/cart/delete/${item.id}/`, {
+    await fetch(`${API_BASE}/cart/delete/${item.id}/`, {
       method: "DELETE",
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("access")
@@ -204,7 +204,7 @@ async function decreaseQty(index) {
 async function removeItem(index) {
   const item = cart[index];
 
-  await fetch(`${API_BASE}/api/cart/delete/${item.id}/`, {
+  await fetch(`${API_BASE}/cart/delete/${item.id}/`, {
     method: "DELETE",
     headers: {
       "Authorization": "Bearer " + localStorage.getItem("access")
@@ -1254,7 +1254,7 @@ async function toggleWishlist(productId) {
   if (isInWishlist(productId)) {
     // Remove from wishlist
     try {
-      await fetch(`${API_BASE}/api/wishlist/remove/`, {
+      await fetch(`${API_BASE}/wishlist/remove/`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -1270,7 +1270,7 @@ async function toggleWishlist(productId) {
   } else {
     // Add to wishlist
     try {
-      const res = await fetch(`${API_BASE}/api/wishlist/add/`, {
+      const res = await fetch(`${API_BASE}/wishlist/add/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1308,7 +1308,7 @@ async function removeFromWishlistAPI(productId) {
 
   if (token) {
     try {
-      await fetch(`${API_BASE}/api/wishlist/remove/`, {
+      await fetch(`${API_BASE}/wishlist/remove/`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -1333,7 +1333,7 @@ async function loadWishlist() {
   if (!token) return;
 
   try {
-    const res = await fetch(`${API_BASE}/api/wishlist/`, {
+    const res = await fetch(`${API_BASE}/wishlist/`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     if (res.ok) {
