@@ -27,8 +27,8 @@ backend/db.sqlite3
 # =====================
 # Media Uploads
 # =====================
-media/
-backend/media/
+# media/
+# backend/media/
 
 # =====================
 # Python Cache
